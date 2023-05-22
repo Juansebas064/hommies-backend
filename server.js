@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 const port = 5000;
 const cors = require("cors");
-
+const GetActividadData = require("./api/db");
 
 app.use(cors(
   {origin: true, credentials: true}));
@@ -14,11 +14,15 @@ app.listen(port, () => {
 });
 
 
-app.get('/', (req, res) => {
+app.get('/asd', (req, res) => {
     res.send('¡Hola desde el backend para mister Jordi!');
   });
 
 
-app.get('/api/jordiMessage', (req, res) => {
-  res.send(apiMessage);
-})
+
+  //get para hacer las request de las bases de datos
+app.get('/data', async(req, res) => {
+
+  const respuesta = await GetActividadData();
+  res.send(respuesta);
+});
