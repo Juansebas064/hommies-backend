@@ -27,4 +27,5 @@ const GetActividadData = async () => {
 };
 
 module.exports = GetActividadData;
+module.exports = pool;
 
