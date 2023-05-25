@@ -15,12 +15,10 @@ const pool = new Pool(config);
 
 const GetActividadData = async () => {
   try {
-    const respuesta = await pool.query("SELECT * FROM actividad");
+    const respuesta = await pool.query("SELECT * FROM evento");
 
-    
-   
-    return respuesta.fields;
-   
+    return respuesta;
+
   } catch (error) {
     console.log(error);
   }
