@@ -1,8 +1,7 @@
-
 //archivo que contiene los modulos para las peticiones a la base de datos
 
-
 const res = require("express/lib/response");
+
 const { Pool } = require("pg");
 const config = {
   user: "yxhicvui",
@@ -16,14 +15,10 @@ const pool = new Pool(config);
 const GetActividadData = async () => {
   try {
     const respuesta = await pool.query("SELECT * FROM evento");
-
     return respuesta;
-
   } catch (error) {
     console.log(error);
   }
 };
 
-module.exports = GetActividadData;
-module.exports = pool;
-
+module.exports = { GetActividadData, pool };
