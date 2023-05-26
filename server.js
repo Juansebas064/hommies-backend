@@ -16,10 +16,8 @@ app.get('/asd', (req, res) => {
   res.send('¡Hola desde el backend para mister Jordi!');
 });
 
-
 //get para hacer las request de las bases de datos
 app.get('/data', async (req, res) => {
-
   const respuesta = await GetActividadData();
   res.send(respuesta);
 });
