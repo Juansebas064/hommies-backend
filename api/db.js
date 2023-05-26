@@ -12,13 +12,16 @@ const config = {
 
 const pool = new Pool(config);
 
-const GetActividadData = async () => {
+const getEventoData = async () => {
   try {
-    const respuesta = await pool.query("SELECT * FROM evento");
+    const respuesta = await pool.query("SELECT * FROM evento;");
     return respuesta;
   } catch (error) {
     console.log(error);
   }
 };
 
-module.exports = { GetActividadData, pool };
+module.exports = {
+  pool: pool,
+  getEventoData: getEventoData
+}

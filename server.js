@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 const port = 5000;
 const cors = require("cors");
-const GetActividadData = require("./api/db");
+const {getEventoData} = require("./api/db");
 const addEventRouter = require('./routes/addEventRoute')
 
 app.use(cors(
@@ -17,8 +17,8 @@ app.get('/asd', (req, res) => {
 });
 
 //get para hacer las request de las bases de datos
-app.get('/data', async (req, res) => {
-  const respuesta = await GetActividadData();
+app.get('/api/evento/consultar', async (req, res) => {
+  const respuesta = await getEventoData();
   res.send(respuesta);
 });
 
