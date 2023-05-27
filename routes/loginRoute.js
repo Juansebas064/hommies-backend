@@ -5,4 +5,4 @@ const validarSesion = require('../controllers/loginController.js');
 
 routerLogin.post('/validar', validarSesion);
 
-module.exports.routerLogin = routerLogin;
+module.exports = routerLogin;
