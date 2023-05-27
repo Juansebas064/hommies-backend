@@ -8,6 +8,7 @@ const cors = require("cors");
 const {getEventoData} = require("./api/db");
 const addEventRouter = require('./routes/addEventRoute')
 const routerLogin = require('./routes/loginRoute');
+const verifyGoogleLogin = require('./routes/rutasModuloLogin');
 
 app.use(cors(
   { origin: true, credentials: true }));
@@ -27,6 +28,8 @@ app.get('/api/evento/consultar', async (req, res) => {
 app.use('/api', addEventRouter);
 
 app.use('/login', routerLogin);
+
+app.use('/api', verifyGoogleLogin);
 
 app.listen(port, () => {
   console.log(`Servidor backend en ejecución en http://localhost:${port}`);
