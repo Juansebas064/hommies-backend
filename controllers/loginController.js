@@ -12,7 +12,6 @@ const validarSesion = async (req, res) => {
           LIMIT 1
         `;
         const { rows } = await pool.query(query, [nickname]);
-        console.log(rows);
     
         if (rows.length === 0) {
           return res.status(404).json({ error: 'El nickname no está registrado' });
