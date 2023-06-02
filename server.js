@@ -9,6 +9,7 @@ const {getEventoData} = require("./api/db");
 const addEventRouter = require('./routes/addEventRoute')
 const routerLogin = require('./routes/loginRoute');
 const verifyGoogleLogin = require('./routes/rutasModuloLogin');
+const jwtCreate = require('./routes/sessionRoute');
 
 app.use(cors(
   { origin: true, credentials: true }));
@@ -27,9 +28,20 @@ app.get('/api/evento/consultar', async (req, res) => {
 
 app.use('/api', addEventRouter);
 
-app.use('/login', routerLogin);
 
+//CAMBIO ESTO POR EL JWTCONTROLLER
+//app.use('/login', routerLogin);
+
+
+
+//use para crear y verificar el jwt con el boton de GOOGLE
 app.use('/api', verifyGoogleLogin);
+
+
+//use para crear y verificar el jwt con el boton de INICIO NORMAL
+
+app.use('/api', jwtCreate);
+
 
 app.listen(port, () => {
   console.log(`Servidor backend en ejecución en http://localhost:${port}`);

@@ -1,6 +1,6 @@
 const {pool} = require('../api/db.js');
 const {verifyGoogleCredential} = require('../api/AuthGoogle');
-
+const jwt = require('jsonwebtoken');
 
 
 const verificarIDBd = async (idcliente) => {
@@ -39,19 +39,34 @@ const verifyGoogleLogin = async (req, res) => {
   
     const VerificarBD = await verificarIDBd(result.userId);
   
-    console.log(VerificarBD);
-  
-    const bandera = true;
+   // console.log(VerificarBD);
+   console.log(VerificarBD.rows);
+    //const bandera = true;
   
     if (VerificarBD.rowCount == 0) {
   
       console.log(VerificarBD.rowCount + " asdfghgfdsdsfgdsdfg");
-  
-      res.send(!bandera);
-  
+    
+      res.send({
+        
+        isLoged:false,
+        token: null
+      });
+      
+      
     } else {
   
-      res.send(bandera);
+      console.log("asfdghfdsdfghgfdsdfghfdsfghfdsfghjgfdsfghj");
+
+      const json = VerificarBD.rows[0];
+
+      const token = jwt.sign(json, "ruizgei");
+     
+      res.send({
+        
+        isLoged:true,
+        token: token
+      });
   
     }
   

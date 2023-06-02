@@ -29,15 +29,11 @@ async function verifyGoogleCredential(token) {
 
     const payload = ticket.getPayload();
     const userId = payload.sub;
-    const email = payload.email;
-    const name = payload.name;
 
     // Puedes realizar validaciones adicionales o guardar la información del usuario en la base de datos
 
     return {
-      userId,
-      email,
-      name,
+      userId
     };
   } catch (error) {
     console.error("Error verifying Google credential:", error);
