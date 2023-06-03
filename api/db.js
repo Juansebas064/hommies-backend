@@ -1,6 +1,12 @@
 //archivo que contiene los modulos para las peticiones a la base de datos
 
 const res = require("express/lib/response");
+const {Sequelize} = require('sequelize');
+
+const sequelize = new Sequelize('yxhicvui', 'yxhicvui', 'nWBzu5sNC2xI0SOFVxXjeT1k6ZYLm1Jl', {
+  host: 'mahmud.db.elephantsql.com',
+  dialect: 'postgres'
+})
 
 const { Pool } = require("pg");
 const config = {
@@ -91,5 +97,6 @@ module.exports = validarSesion;
 module.exports = {
   pool: pool,
   getEventoData: getEventoData,
-  validarSesion: validarSesion 
+  validarSesion: validarSesion,
+  sequelize: sequelize
 }
