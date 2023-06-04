@@ -19,7 +19,7 @@ const jwtGenerator = async (req, res) => {
   
   } else {
 
-    const token = jwt.sign(user.id, "ruizgei");
+    const token = jwt.sign(user.id, "ds1g3");
 
     res.send({
       token: token
