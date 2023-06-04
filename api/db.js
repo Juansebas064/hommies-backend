@@ -1,6 +1,7 @@
 //archivo que contiene los modulos para las peticiones a la base de datos
 
 const res = require("express/lib/response");
+const jwt = require('jsonwebtoken');
 
 const { Pool } = require("pg");
 const config = {
@@ -44,8 +45,7 @@ const validarSesion = async (req, res) => {
             console.log("ENTRA AQUI");
 
             return ({
-              isLoged:false,
-              token:null
+              ingresoCorrecto:false
 
             });
         }
@@ -54,26 +54,14 @@ const validarSesion = async (req, res) => {
         // Verificar si la contraseña coincide
         if (rows[0].contraseña !== password) {
           return ({
-            isLoged:false,
-            token:null
+            ingresoCorrecto:false
 
           });
         }
 
         const usuario = {
-            "isLogged": true,
-            "id": rows[0].id,
-            "tipo_de_usuario": rows[0].tipo_de_usuario,
-            "nickname": rows[0].nickname,
-            "nombre": rows[0].nombre,
-            "apellido": rows[0].apellido,
-            "genero": rows[0].genero,
-            "foto": rows[0].foto,
-            "correo_electronico": rows[0].correo_electronico,
-            "fecha_nacimiento": rows[0].fecha_nacimiento,
-            "descripcion": rows[0].descripcion,
-            "likes": rows[0].likes,
-            "ciudad": rows[0].ciudad
+          ingresoCorrecto: true,
+            "id": rows[0].id
         }
     
         // El inicio de sesión fue exitoso
@@ -86,10 +74,87 @@ const validarSesion = async (req, res) => {
       }
 };
 
+
+const registrarPersonaGoogle = async (req, res) => {
+
+  console.log(req);
+
+  const respuesta = await pool.query(`INSERT INTO persona(
+    id, nickname, nombre, apellido, foto, correo_electronico)
+    VALUES ('${req.id}','${req.nickname}','${req.firstName}', '${req.lastName}', '${req.picture}', '${req.email}');`);
+
+    const datosToken = {
+
+      id: req.id
+    }
+    const token = jwt.sign(datosToken, "ruizgei");
+  console.log(respuesta);
+
+
+
+
+  return token;
+};
+
+
+
+const generarIdentificadorUnico = () => {
+  const fechaActual = new Date();
+  const anio = fechaActual.getFullYear();
+  const mes = fechaActual.getMonth() + 1;
+  const dia = fechaActual.getDate();
+  const hora = fechaActual.getHours();
+  const minutos = fechaActual.getMinutes();
+  const segundos = fechaActual.getSeconds();
+  const milisegundos = fechaActual.getMilliseconds();
+
+  const identificador = `${anio}${mes}${dia}${hora}${minutos}${segundos}${milisegundos}`;
+
+  return identificador;
+}
+
+
+
+
+const registrarPersonaNormal = async (req, res) => {
+
+
+
+  //como sabemos que no esta registrado, toca generar un nuevo id para la persona
+
+   const id = generarIdentificadorUnico();
+  
+
+  console.log(req);
+  console.log(id);
+
+  const respuesta = await pool.query(`INSERT INTO persona(
+    id, nickname, nombre, apellido, "contraseña", correo_electronico)
+    VALUES ('${id}','${req.nickname}','${req.nombre}', '${req.apellido}', '${req.password}', '${req.email}');`);
+
+
+    const datosToken = {
+
+      id:id
+
+    }
+
+  const token = jwt.sign(datosToken, "ruizgei");
+  console.log(respuesta);
+
+
+
+
+  return token;
+};
+
+
 module.exports = validarSesion;
 
 module.exports = {
   pool: pool,
   getEventoData: getEventoData,
-  validarSesion: validarSesion 
+  validarSesion: validarSesion,
+  registrarPersonaGoogle: registrarPersonaGoogle,
+  registrarPersonaNormal:registrarPersonaNormal
 }

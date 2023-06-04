@@ -28,12 +28,19 @@ async function verifyGoogleCredential(token) {
     });
 
     const payload = ticket.getPayload();
+
+    console.log(payload);
     const userId = payload.sub;
 
     // Puedes realizar validaciones adicionales o guardar la información del usuario en la base de datos
 
     return {
-      userId
+      id: userId,
+      email: payload.email,
+      nickname: payload.name,
+      firstName: payload.given_name,
+      lastName: payload.family_name,
+      picture: payload.picture
     };
   } catch (error) {
     console.error("Error verifying Google credential:", error);

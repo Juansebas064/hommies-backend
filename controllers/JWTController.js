@@ -8,21 +8,20 @@ const jwtGenerator = async (req, res) => {
 
   const user = await validarSesion(req);
 
-  console.log(user);
-  if(user.isLoged == false) {
+  console.log("estas en jwtgenerator   ");
 
+  console.log(user);
+  if(user.ingresoCorrecto != true) {
+    
       res.send({
-        
-        isLoged:false,
         token: null
       });
+  
   } else {
 
-
-    const token = jwt.sign(user, "ruizgei");
+    const token = jwt.sign(user.id, "ruizgei");
 
     res.send({
-        isLoged: true,
       token: token
     });
     console.log(user);
