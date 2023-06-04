@@ -1,16 +1,15 @@
 //archivo que contiene los modulos para las peticiones a la base de datos
 
 const res = require("express/lib/response");
-<<<<<<< HEAD
+
 const jwt = require('jsonwebtoken');
-=======
-const {Sequelize} = require('sequelize');
+
+const Sequelize= require('sequelize');
 
 const sequelize = new Sequelize('yxhicvui', 'yxhicvui', 'nWBzu5sNC2xI0SOFVxXjeT1k6ZYLm1Jl', {
   host: 'mahmud.db.elephantsql.com',
   dialect: 'postgres'
 })
->>>>>>> 11c6dfcce1ff67ce8dbc324299c4ae6e39502267
 
 const { Pool } = require("pg");
 const config = {
@@ -158,16 +157,13 @@ const registrarPersonaNormal = async (req, res) => {
 };
 
 
-module.exports = validarSesion;
+//module.exports = validarSesion;
 
 module.exports = {
   pool: pool,
   getEventoData: getEventoData,
   validarSesion: validarSesion,
-<<<<<<< HEAD
   registrarPersonaGoogle: registrarPersonaGoogle,
-  registrarPersonaNormal:registrarPersonaNormal
-=======
+  registrarPersonaNormal:registrarPersonaNormal,
   sequelize: sequelize
->>>>>>> 11c6dfcce1ff67ce8dbc324299c4ae6e39502267
 }
