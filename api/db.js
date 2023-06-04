@@ -95,7 +95,7 @@ const registrarPersonaGoogle = async (req, res) => {
 
       id: req.id
     }
-    const token = jwt.sign(datosToken, "ruizgei");
+    const token = jwt.sign(datosToken, "ds1g3");
   console.log(respuesta);
 
 
