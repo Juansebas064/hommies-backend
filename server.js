@@ -30,22 +30,10 @@ app.get('/api/evento/consultar', async (req, res) => {
 
 
 //use para añadir un evento
-//app.use('/api', addEventRouter);
-
-
-//cambio para comvinar lo que se tenia antes 
-
-
-
-
-//use para añadir un evento
 app.use('/api', routerAgregarEvento);
 
 //use para editar eventos creados
 app.use('/api', routerEditarEvento);
-
-
-
 
 
 //use para crear y verificar el jwt con el boton de GOOGLE
@@ -65,10 +53,6 @@ app.use('/api',verifyGoogleRegister);
 //use para registrar una persona de forma normal
 
 app.use('/api',normalRegister);
-
-
-
-
 
 
 app.listen(port, () => {
