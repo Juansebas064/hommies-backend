@@ -4,7 +4,7 @@ const {pool, registrarPersonaNormal} = require('../api/db.js');
 const verificarIDBd = async (jsonPersona) => {
 
     try {
-      const respuesta = await pool.query(`SELECT * FROM persona WHERE (correo_electronico ='${jsonPersona.email}')`);
+      const respuesta = await pool.query(`SELECT * FROM persona WHERE (correo_electronico ='${jsonPersona.email}' OR nickname = '${jsonPersona.nickname}')`);
      
      
       return respuesta;
