@@ -54,8 +54,8 @@ const persona = sequelize.define('persona', {
     token_session: {
       type: DataTypes.STRING,
     },
-  }, {
-    tableName:'persona'
+  },{
+    timestamps: false 
   });
 
   module.exports = persona;

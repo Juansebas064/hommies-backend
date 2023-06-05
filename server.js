@@ -6,7 +6,7 @@ const port = 5000;
 const cors = require("cors");
 
 const {getEventoData} = require("./api/db");
-const addEventRouter = require('./routes/addEventRoute')
+const {routerAgregarEvento, routerEditarEvento} = require('./routes/addEventRoute')
 const routerLogin = require('./routes/loginRoute');
 const verifyGoogleLogin = require('./routes/rutasModuloLogin');
 const jwtCreate = require('./routes/sessionRoute');
@@ -30,7 +30,10 @@ app.get('/api/evento/consultar', async (req, res) => {
 
 
 //use para añadir un evento
-app.use('/api', addEventRouter);
+app.use('/api', routerAgregarEvento);
+
+//use para editar eventos creados
+app.use('/api', routerEditarEvento);
 
 
 //use para crear y verificar el jwt con el boton de GOOGLE

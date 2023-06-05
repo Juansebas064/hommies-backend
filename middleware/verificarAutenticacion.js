@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
+const {pool} = require('../api/db.js');
 
-const verificarAutenticacion = (req, res, next) => {
-
+const verificarAutenticacion = async (req, res, next) => {
+    console.log(req.body);
     const token = req.headers.authorization;
 
     // Verificar la validez del token
@@ -14,13 +15,20 @@ const verificarAutenticacion = (req, res, next) => {
         const decodedToken = jwt.verify(token, 'ds1g3'); // Utiliza tu propia clave secreta del token
 
         // Verificar la autenticidad del usuario
-        const id = decodedToken.id; // Supongamos que el token contiene el ID del usuario
+        const id = decodedToken;
 
-        // Aquí puedes realizar la lógica necesaria para verificar la autenticidad del usuario, por ejemplo, consultando la base de datos
+        const query = `
+          SELECT * FROM persona
+          WHERE id = $1
+          LIMIT 1
+        `;
+        const { rows } = await pool.query(query, [id]);
 
-        // Si el usuario es auténtico, puedes establecer la información del usuario en el objeto 'req' para que esté disponible en las rutas y controladores
+        if (rows.length === 0) {
+          return res.status(404).json({ error: 'El id no es valido', isLogged: false });
+        }
+
         req.id = id;
-
         // Llamar a 'next()' para permitir que la solicitud continúe al controlador correspondiente
         next();
     } catch (error) {

@@ -33,15 +33,16 @@ const evento = sequelize.define('evento', {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    organizador: {
+    creador: {
       type: DataTypes.INTEGER,
+      allowNull: true,
       references: {
         model: 'persona',
         key: 'id',
-      },
+      }
     },
-  }, {
-    tableName: 'evento',
+  },{
+    timestamps: false 
   });
 
   module.exports = evento;

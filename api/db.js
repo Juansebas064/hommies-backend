@@ -4,12 +4,15 @@ const res = require("express/lib/response");
 
 const jwt = require('jsonwebtoken');
 
-const Sequelize= require('sequelize');
+const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize('yxhicvui', 'yxhicvui', 'nWBzu5sNC2xI0SOFVxXjeT1k6ZYLm1Jl', {
   host: 'mahmud.db.elephantsql.com',
-  dialect: 'postgres'
-})
+  dialect: 'postgres',
+  define: {
+    freezeTableName: true
+  }
+});
 
 const { Pool } = require("pg");
 const config = {
@@ -33,53 +36,53 @@ const getEventoData = async () => {
 //FALTA LOGICA PARA REGISTRO, NO TOCAR FRONT'S :))))))))))
 
 const validarSesion = async (req, res) => {
-    const nickname = req.body.nickname;
-    const password = req.body.password;
-    try {
+  const nickname = req.body.nickname;
+  const password = req.body.password;
+  try {
 
-      console.log(nickname);
-   //   console.log(req)
+    console.log(nickname);
+    //   console.log(req)
 
-        // Consulta a la base de datos para obtener el usuario con el nickname proporcionado
-        const query = `
+    // Consulta a la base de datos para obtener el usuario con el nickname proporcionado
+    const query = `
           SELECT * FROM persona
           WHERE nickname = $1
           LIMIT 1
         `;
-        const { rows } = await pool.query(query, [nickname]);
-    
-        if (rows.length == 0) {
-         // return res.status(404).json({ error: 'El nickname no está registrado', isLogged: false });
-            console.log("ENTRA AQUI");
+    const { rows } = await pool.query(query, [nickname]);
 
-            return ({
-              ingresoCorrecto:false
+    if (rows.length == 0) {
+      // return res.status(404).json({ error: 'El nickname no está registrado', isLogged: false });
+      console.log("ENTRA AQUI");
 
-            });
-        }
+      return ({
+        ingresoCorrecto: false
 
-    
-        // Verificar si la contraseña coincide
-        if (rows[0].contraseña !== password) {
-          return ({
-            ingresoCorrecto:false
+      });
+    }
 
-          });
-        }
 
-        const usuario = {
-          ingresoCorrecto: true,
-            "id": rows[0].id
-        }
-    
-        // El inicio de sesión fue exitoso
-       return usuario;
+    // Verificar si la contraseña coincide
+    if (rows[0].contraseña !== password) {
+      return ({
+        ingresoCorrecto: false
 
-      } catch (error) {
-        
-        console.error('Error al realizar el inicio de sesión:', error);
-       // res.status(500).json({ error: 'Error del servidor' });
-      }
+      });
+    }
+
+    const usuario = {
+      ingresoCorrecto: true,
+      "id": rows[0].id
+    }
+
+    // El inicio de sesión fue exitoso
+    return usuario;
+
+  } catch (error) {
+
+    console.error('Error al realizar el inicio de sesión:', error);
+    // res.status(500).json({ error: 'Error del servidor' });
+  }
 };
 
 
@@ -91,11 +94,11 @@ const registrarPersonaGoogle = async (req, res) => {
     id, nickname, nombre, apellido, foto, correo_electronico)
     VALUES ('${req.id}','${req.nickname}','${req.firstName}', '${req.lastName}', '${req.picture}', '${req.email}');`);
 
-    const datosToken = {
+  const datosToken = {
 
-      id: req.id
-    }
-    const token = jwt.sign(datosToken, "ds1g3");
+    id: req.id
+  }
+  const token = jwt.sign(datosToken, "ds1g3");
   console.log(respuesta);
 
 
@@ -130,8 +133,8 @@ const registrarPersonaNormal = async (req, res) => {
 
   //como sabemos que no esta registrado, toca generar un nuevo id para la persona
 
-   const id = generarIdentificadorUnico();
-  
+  const id = generarIdentificadorUnico();
+
 
   console.log(req);
   console.log(id);
@@ -141,11 +144,11 @@ const registrarPersonaNormal = async (req, res) => {
     VALUES ('${id}','${req.nickname}','${req.nombre}', '${req.apellido}', '${req.password}', '${req.email}');`);
 
 
-    const datosToken = {
+  const datosToken = {
 
-      id:id
+    id: id
 
-    }
+  }
 
   const token = jwt.sign(datosToken, "ruizgei");
   console.log(respuesta);
@@ -164,6 +167,6 @@ module.exports = {
   getEventoData: getEventoData,
   validarSesion: validarSesion,
   registrarPersonaGoogle: registrarPersonaGoogle,
-  registrarPersonaNormal:registrarPersonaNormal,
+  registrarPersonaNormal: registrarPersonaNormal,
   sequelize: sequelize
 }

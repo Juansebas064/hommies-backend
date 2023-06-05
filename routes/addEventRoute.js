@@ -1,11 +1,17 @@
 const express = require('express');
+const routerAgregarEvento = express.Router();
+const {agregarEvento, editarEvento} = require('../controllers/addEventController.js');
 
-const routerEvento = express.Router();
+const routerEditarEvento = express.Router();
+const verificarAutenticacion =require('../middleware/verificarAutenticacion.js');
 
-const agregarEvento = require('../controllers/addEventController.js');
+routerEditarEvento.put('/evento/editar/:codigo_evento', editarEvento);
 
 
-routerEvento.post('/evento/agregar', agregarEvento);
+routerAgregarEvento.post('/evento/agregar', verificarAutenticacion, agregarEvento);
 
-module.exports = routerEvento;
+module.exports = {
+    routerAgregarEvento: routerAgregarEvento,
+    routerEditarEvento: routerEditarEvento
+};
 
