@@ -5,7 +5,7 @@ const {agregarEvento, editarEvento} = require('../controllers/addEventController
 const routerEditarEvento = express.Router();
 const verificarAutenticacion = require('../middleware/verificarAutenticacion.js');
 
-routerEditarEvento.put('/evento/editar/:codigo_evento', editarEvento);
+routerEditarEvento.put('/evento/editar/:codigo_evento', verificarAutenticacion, editarEvento);
 
 
 routerAgregarEvento.post('/evento/agregar', verificarAutenticacion, agregarEvento);
