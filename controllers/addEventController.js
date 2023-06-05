@@ -20,23 +20,22 @@ const agregarEvento = async (req, res) => {
 
 const editarEvento = async (req, res) => {
     const codigo_evento = (req.params.codigo_evento).substring(1);
+
     const atributosActualizados = req.body;
-    console.log(atributosActualizados);
 
     try {
         const eventoExistente = await evento.findByPk(codigo_evento);
-        console.log(eventoExistente.nombre);
 
         if (!eventoExistente) {
-            return res.status(404).json({ message: 'Evento no encontrado' });
+            return res.status(404).json({ message: 'El evento a editar no existe' });
         }
         const eventoActualizado = Object.assign(eventoExistente, atributosActualizados);
-        console.log(eventoActualizado.nombre);
+        
         await eventoActualizado.save();
 
         return res.status(200).json({ message: 'Evento actualizado exitosamente'});
     } catch (error) {
-        //console.log(error);
+        console.log(error);
         return res.status(500).json({ message: 'Error al actualizar el evento' });
     }
 };
