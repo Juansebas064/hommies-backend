@@ -6,7 +6,7 @@ const persona = sequelize.define('persona', {
       type: DataTypes.STRING,
       primaryKey: true,
     },
-    tipo_usuario: {
+    tipo_de_usuario: {
       type: DataTypes.STRING,
       allowNull: false,
     },
