@@ -12,6 +12,7 @@ const verifyGoogleLogin = require('./routes/rutasModuloLogin');
 const jwtCreate = require('./routes/sessionRoute');
 const verifyGoogleRegister = require('./routes/rutasModuloRegistroGoogle');
 const normalRegister = require('./routes/turaModuloRegistroNormal');
+const routerAgregarLugar = require('./routes/addPlaceRoute')
 
 app.use(cors(
   { origin: true, credentials: true }));
@@ -53,6 +54,11 @@ app.use('/api',verifyGoogleRegister);
 //use para registrar una persona de forma normal
 
 app.use('/api',normalRegister);
+
+//use para agregar lugar
+
+app.use('/api', routerAgregarLugar); 
+
 
 
 app.listen(port, () => {
