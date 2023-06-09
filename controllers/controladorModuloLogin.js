@@ -10,7 +10,7 @@ const verificarIDBd = async (idcliente) => {
   try {
     const respuesta = await pool.query(`SELECT * FROM persona WHERE (id ='${idcliente}')`);
 
-
+    console.log('VerificarIDBd: ' + idcliente)
     return respuesta;
 
   } catch (error) {
@@ -30,10 +30,10 @@ const verifyGoogleLogin = async (req, res) => {
 
   const result = await verifyGoogleCredential(req.body.data.credential);
 
-  console.log(result);
-  console.log(result.id);
-  console.log(result.email);
-  console.log(typeof result.id);
+  // console.log(result);
+  // console.log(result.id);
+  // console.log(result.email);
+  // console.log(typeof result.id);
 
 
   const VerificarBD = await verificarIDBd(result.id);
@@ -44,7 +44,7 @@ const verifyGoogleLogin = async (req, res) => {
 
   if (VerificarBD.rowCount == 0) {
 
-    console.log(VerificarBD.rowCount + " asdfghgfdsdsfgdsdfg");
+    // console.log(VerificarBD.rowCount + " asdfghgfdsdsfgdsdfg");
 
 
     //se setea que no esta registrado
@@ -59,11 +59,15 @@ const verifyGoogleLogin = async (req, res) => {
 
   } else {
 
-    console.log("asfdghfdsdfghgfdsdfghfdsfghfdsfghjgfdsfghj");
+    // console.log("----------------------------------");
 
     const json = VerificarBD.rows[0].id;
 
+    // console.log('json antes de: ' + json)
+
     const token = jwt.sign(json, "ds1g3");
+    // console.log('Id guardada en el token: ' + json)
+    // console.log('Token enviado: ' + token)
 
     res.send({
       token: token
