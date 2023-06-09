@@ -5,14 +5,15 @@ const app = express();
 const port = 5000;
 const cors = require("cors");
 
-const {getEventoData} = require("./api/db");
-const {routerAgregarEvento, routerEditarEvento} = require('./routes/addEventRoute');
-//const routerLogin = require('./routes/loginRoute');
+const { getEventoData } = require("./api/db");
+const { routerAgregarEvento, routerEditarEvento } = require('./routes/addEventRoute');
+const userDataRouter = require('./routes/userDataRouter');
 const verifyGoogleLogin = require('./routes/rutasModuloLogin');
 const jwtCreate = require('./routes/sessionRoute');
 const verifyGoogleRegister = require('./routes/rutasModuloRegistroGoogle');
 const normalRegister = require('./routes/turaModuloRegistroNormal');
-const routerAgregarLugar = require('./routes/addPlaceRoute')
+const routerAgregarLugar = require('./routes/addPlaceRoute');
+
 
 app.use(cors(
   { origin: true, credentials: true }));
@@ -48,16 +49,20 @@ app.use('/api', jwtCreate);
 
 //use para registrar una persona en la base de datos con google
 
-app.use('/api',verifyGoogleRegister);
+app.use('/api', verifyGoogleRegister);
 
 
 //use para registrar una persona de forma normal
 
-app.use('/api',normalRegister);
+app.use('/api', normalRegister);
+
+// use para obtener los datos del usuario al momento de hacer login
+
+app.use('/api', userDataRouter); /* /api/persona/consultar */
 
 //use para agregar lugar
 
-app.use('/api', routerAgregarLugar); 
+app.use('/api', routerAgregarLugar);
 
 
 
