@@ -61,11 +61,11 @@ const verifyGoogleLogin = async (req, res) => {
 
     // console.log("----------------------------------");
 
-    const json = VerificarBD.rows[0].id;
+    const id = VerificarBD.rows[0].id;
 
     // console.log('json antes de: ' + json)
 
-    const token = jwt.sign(json, "ds1g3");
+    const token = jwt.sign({ id }, "ds1g3");
     // console.log('Id guardada en el token: ' + json)
     // console.log('Token enviado: ' + token)
 
