@@ -13,7 +13,8 @@ const eliminarEvento = async (req, res) => {
       const eventoExistente = await evento.findByPk(req.body.codigo_evento);
   
       if (!eventoExistente) {
-        return res.status(404).json({ message: 'El evento a eliminar no existe' });
+
+        return res.status(404).json({ message: 'El evento a eliminar no existeeeeee' });
       }
   
       await eventoExistente.destroy();
