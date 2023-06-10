@@ -13,7 +13,7 @@ const jwtCreate = require('./routes/sessionRoute');
 const verifyGoogleRegister = require('./routes/rutasModuloRegistroGoogle');
 const normalRegister = require('./routes/turaModuloRegistroNormal');
 const routerAgregarLugar = require('./routes/addPlaceRoute');
-
+const routerEliminarEvento = require('./routes/rutasEliminarEvento');
 
 app.use(cors(
   { origin: true, credentials: true }));
@@ -64,6 +64,7 @@ app.use('/api', userDataRouter); /* /api/persona/consultar */
 
 app.use('/api', routerAgregarLugar);
 
+app.use('/api', routerEliminarEvento);
 
 
 app.listen(port, () => {

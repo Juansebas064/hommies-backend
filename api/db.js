@@ -3,6 +3,7 @@
 const res = require("express/lib/response");
 
 const jwt = require('jsonwebtoken');
+
 const by = require('bcrypt');
 
 const Sequelize = require('sequelize');
