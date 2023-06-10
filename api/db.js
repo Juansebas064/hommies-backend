@@ -3,6 +3,7 @@
 const res = require("express/lib/response");
 
 const jwt = require('jsonwebtoken');
+const by = require('bcrypt');
 
 const Sequelize = require('sequelize');
 
@@ -62,8 +63,9 @@ const validarSesion = async (req, res) => {
     }
 
 
+    //metodo de bycript para comparar sin necesitad de encriptar
     // Verificar si la contraseña coincide
-    if (rows[0].contraseña !== password) {
+    if (!await by.compare(password, rows[0].contraseña)) {
       return ({
         ingresoCorrecto: false
 
@@ -125,6 +127,16 @@ const generarIdentificadorUnico = () => {
 }
 
 
+const encriptarPass = async(password) => {
+
+  const salt = await by.genSalt();
+  const encript =  await by.hash(password, salt);
+
+
+
+  return encript;
+}
+
 
 
 const registrarPersonaNormal = async (req, res) => {
@@ -136,12 +148,32 @@ const registrarPersonaNormal = async (req, res) => {
   const id = generarIdentificadorUnico();
 
 
+  //encriptamos la contraseña
+  const password = await encriptarPass(req.password);
+
+  console.log("CONTRA ENCRIPTAASDASD");
+  console.log(password);
+
+
+
   console.log(req);
   console.log(id);
 
+  const ojalaSirva = {
+
+    id:id,
+    req
+
+  }
+
+  console.log(ojalaSirva);
+
+
+
+
   const respuesta = await pool.query(`INSERT INTO persona(
     id, nickname, nombre, apellido, "contraseña", correo_electronico)
-    VALUES ('${id}','${req.nickname}','${req.nombre}', '${req.apellido}', '${req.password}', '${req.email}');`);
+    VALUES ('${id}','${req.nickname}','${req.nombre}', '${req.apellido}', '${password}', '${req.email}');`);
 
 
   const datosToken = {
