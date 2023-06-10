@@ -3,7 +3,6 @@ const persona = require('../models/persona.js');
 const { json } = require('express/lib/response.js');
 
 const verificarAutenticacion = async (req, res, next) => {
-  console.log(req.body.nombre);
   const token = req.headers.authorization;
 
   // Verificar la validez del token
@@ -16,15 +15,15 @@ const verificarAutenticacion = async (req, res, next) => {
     const decodedToken = jwt.verify(token, 'ds1g3'); // Utiliza tu propia clave secreta del token
 
     // Verificar la autenticidad del usuario
-    const id = decodedToken;
+    const { id } = decodedToken;
 
     const personaRegistrada = await persona.findByPk(id);
 
-    if(!personaRegistrada){
-      res.status(500).json({error: 'La persona no esta registrada'});
+    if (!personaRegistrada) {
+      res.status(500).json({ error: 'La persona no esta registrada' });
     }
 
-    //req.id = id;
+    req.id_usuario = id;
     // Llamar a 'next()' para permitir que la solicitud continúe al controlador correspondiente
     next();
   } catch (error) {
