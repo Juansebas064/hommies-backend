@@ -128,10 +128,10 @@ const generarIdentificadorUnico = () => {
 }
 
 
-const encriptarPass = async(password) => {
+const encriptarPass = async (password) => {
 
   const salt = await by.genSalt();
-  const encript =  await by.hash(password, salt);
+  const encript = await by.hash(password, salt);
 
 
 
@@ -162,7 +162,7 @@ const registrarPersonaNormal = async (req, res) => {
 
   const ojalaSirva = {
 
-    id:id,
+    id: id,
     req
 
   }
@@ -201,5 +201,6 @@ module.exports = {
   validarSesion: validarSesion,
   registrarPersonaGoogle: registrarPersonaGoogle,
   registrarPersonaNormal: registrarPersonaNormal,
-  sequelize: sequelize
+  sequelize: sequelize,
+  generarIdentificadorUnico: generarIdentificadorUnico
 }
