@@ -26,17 +26,7 @@ const config = {
 
 const pool = new Pool(config);
 
-const getEventoData = async () => {
-  try {
-    const respuesta = await pool.query("SELECT * FROM evento;");
-    return respuesta;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 //FALTA LOGICA PARA REGISTRO, NO TOCAR FRONT'S :))))))))))
-
 const validarSesion = async (req, res) => {
   const nickname = req.body.nickname;
   const password = req.body.password;
@@ -197,7 +187,6 @@ const registrarPersonaNormal = async (req, res) => {
 
 module.exports = {
   pool: pool,
-  getEventoData: getEventoData,
   validarSesion: validarSesion,
   registrarPersonaGoogle: registrarPersonaGoogle,
   registrarPersonaNormal: registrarPersonaNormal,
