@@ -15,6 +15,8 @@ const normalRegister = require('./routes/turaModuloRegistroNormal');
 const routerAgregarLugar = require('./routes/addPlaceRoute');
 const routerEliminarEvento = require('./routes/rutasEliminarEvento');
 const routerModificarPerfil = require('./routes/rutasModificarPerfil');
+const routerGetEventPlace = require('./routes/rutaGetEventPlace')
+
 
 app.use(cors(
   { origin: true, credentials: true }));
@@ -63,6 +65,9 @@ app.use('/api', routerAgregarLugar);
 app.use('/api', routerEliminarEvento);
 
 app.use('/api',routerModificarPerfil);
+
+app.use('/api' , routerGetEventPlace)
+
 
 
 app.listen(port, () => {
