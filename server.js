@@ -6,7 +6,7 @@ const port = 5000;
 const cors = require("cors");
 
 const { getEventoData } = require("./api/db");
-const { routerAgregarEvento, routerEditarEvento } = require('./routes/addEventRoute');
+const { routerAgregarEvento, routerEditarEvento, routerObtenerEventosC } = require('./routes/addEventRoute');
 const userDataRouter = require('./routes/userDataRouter');
 const verifyGoogleLogin = require('./routes/rutasModuloLogin');
 const jwtCreate = require('./routes/sessionRoute');
@@ -25,19 +25,14 @@ app.get('/asd', (req, res) => {
   res.send('¡Hola desde el backend para los que iniciaron sesion, pero no para jordi :)');
 });
 
-//get para hacer las request de las bases de datos
-app.get('/api/evento/consultar', async (req, res) => {
-  const respuesta = await getEventoData();
-  res.send(respuesta);
-});
-
-
 //use para añadir un evento
 app.use('/api', routerAgregarEvento);
 
 //use para editar eventos creados
 app.use('/api', routerEditarEvento);
 
+//use para consultar eventos de la misma ciudad en la que vive el usuario loggeado
+app.use('/api', routerObtenerEventosC);
 
 //use para crear y verificar el jwt con el boton de GOOGLE
 app.use('/api', verifyGoogleLogin);
