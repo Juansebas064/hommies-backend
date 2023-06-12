@@ -76,7 +76,7 @@ const obtenerEventosC = async (req, res) => {
 
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: 'Error en el servidor' });
+    res.status(500).json({ error: 'Error en el servidor en obtenerEventosC' });
   }
 }
 
