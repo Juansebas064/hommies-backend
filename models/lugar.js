@@ -1,5 +1,6 @@
 const {sequelize} = require('../api/db.js');
 const {DataTypes} = require('sequelize');
+const ciudad = require('./ciudad.js');
 
 const lugar = sequelize.define('lugar', {
     codigo_lugar: {
@@ -30,12 +31,21 @@ const lugar = sequelize.define('lugar', {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    lugar: {
+    ciudad: {
       type: DataTypes.STRING,
       allowNull: false,
+        references: {
+          model: ciudad,
+          key: ciudad.codigo_ciudad,
+        }
     },
   },{
     timestamps: false 
+  });
+
+  lugar.belongsTo(ciudad, {
+    foreignKey: 'ciudad',
+    as: 'fkl_c'
   });
 
   module.exports = lugar;

@@ -1,5 +1,7 @@
 const {sequelize} = require('../api/db.js');
 const {DataTypes} = require('sequelize');
+const lugar = require('./lugar.js');
+const persona = require('./persona.js');
 
 const evento = sequelize.define('evento', {
     codigo_evento: {
@@ -25,8 +27,8 @@ const evento = sequelize.define('evento', {
     lugar: {
       type: DataTypes.STRING,
       references: {
-        model: 'lugar',
-        key: 'codigo_lugar',
+        model: lugar,
+        key: lugar.codigo_lugar,
       },
     },
     nombre: {
@@ -37,12 +39,22 @@ const evento = sequelize.define('evento', {
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
-        model: 'persona',
-        key: 'id',
+        model: persona,
+        key: persona.id,
       }
     },
   },{
     timestamps: false 
+  });
+
+  evento.belongsTo(lugar, {
+    foreignKey: 'lugar',
+    as: 'fke_l'
+  });
+
+  evento.belongsTo(persona, {
+    foreignKey: 'creador',
+    as: 'fke_p'
   });
 
   module.exports = evento;

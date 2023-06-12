@@ -1,5 +1,6 @@
 const {sequelize} = require('../api/db.js');
 const {DataTypes} = require('sequelize');
+const ciudad = require('./ciudad.js');
 
 const persona = sequelize.define('persona', {
     id: {
@@ -41,11 +42,11 @@ const persona = sequelize.define('persona', {
       type: DataTypes.STRING,
     },
     ciudad: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         references: {
-          model: 'ciudad',
-          key: 'codigo_ciudad',
-        },
+          model: ciudad,
+          key: ciudad.codigo_ciudad,
+        }
       },
     contraseña: {
       type: DataTypes.STRING,
@@ -56,6 +57,11 @@ const persona = sequelize.define('persona', {
     },
   },{
     timestamps: false 
+  });
+
+  persona.belongsTo(ciudad, {
+    foreignKey: 'ciudad',
+    as: 'fkp_c'
   });
 
   module.exports = persona;
