@@ -1,15 +1,12 @@
 const { pool } = require('../api/db.js');
-const evento = require('../models/evento.js');
 const { generarIdentificadorUnico } = require('../api/db.js');
 const jwt = require('jsonwebtoken');
+const evento = require('../models/evento.js');
 
 //Codigo que a traves de una consulta SQL manda toda la informacion que el front proporciona y crea un nuevo evento en la base de datos
 const agregarEvento = async (req, res) => {
 
   try {
-    // const { codigo_evento, descripcion, fecha, hora_inicio, hora_final, lugar, nombre } = req.body;
-
-    // await pool.query('INSERT INTO public.evento (codigo_evento, descripcion, fecha, hora_inicio, hora_final, lugar, nombre) VALUES($1, $2, $3, $4, $5, $6, $7);', [codigo_evento, descripcion, fecha, hora_inicio, hora_final, lugar, nombre]);
 
     const datosNuevoEvento = req.body;
     const codigo_evento = generarIdentificadorUnico()
@@ -64,7 +61,27 @@ const editarEvento = async (req, res) => {
   }
 };
 
+const obtenerEventosC = async (req, res) => {
+
+  try {
+    const query = 'select e.* from evento e inner join lugar l on e.lugar = l.codigo_lugar inner join persona p on l.ciudad = p.ciudad where p.id = $1 order by e.fecha';
+    const values = [req.id_usuario];
+    const eventos = await pool.query(query, values);
+
+    if (!eventos) {
+      res.status(404).json({ error: 'eventos en la misma ciudad no encontrados' });
+    }
+
+    res.status(302).json({ eventos });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+}
+
 module.exports = {
   agregarEvento: agregarEvento,
-  editarEvento: editarEvento
+  editarEvento: editarEvento,
+  obtenerEventosC: obtenerEventosC
 };
