@@ -72,7 +72,7 @@ const obtenerEventosC = async (req, res) => {
       res.status(404).json({ error: 'eventos en la misma ciudad no encontrados' });
     }
 
-    res.status(302).json({ eventos });
+    res.status(200).json(eventos);
 
   } catch (error) {
     console.log(error);
