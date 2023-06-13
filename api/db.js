@@ -8,8 +8,8 @@ const by = require('bcrypt');
 
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('yxhicvui', 'yxhicvui', 'nWBzu5sNC2xI0SOFVxXjeT1k6ZYLm1Jl', {
-  host: 'mahmud.db.elephantsql.com',
+const sequelize = new Sequelize('hommies', 'e_202059898', '202059898', {
+  host: '45.5.167.45',
   dialect: 'postgres',
   define: {
     freezeTableName: true
