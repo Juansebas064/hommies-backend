@@ -18,10 +18,13 @@ const sequelize = new Sequelize('yxhicvui', 'yxhicvui', 'nWBzu5sNC2xI0SOFVxXjeT1
 
 const { Pool } = require("pg");
 const config = {
-  user: "yxhicvui",
-  host: "mahmud.db.elephantsql.com",
-  password: "nWBzu5sNC2xI0SOFVxXjeT1k6ZYLm1Jl",
-  database: "yxhicvui",
+  user: "e_202059898",
+  password: "202059898",
+  pgsql: 'localhost',
+  database: 'hommies',
+  host: "45.5.167.45",
+  port: 5432,
+  schema: "public"
 };
 
 const pool = new Pool(config);

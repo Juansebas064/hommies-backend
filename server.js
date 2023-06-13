@@ -5,8 +5,7 @@ const app = express();
 const port = 5000;
 const cors = require("cors");
 
-const { getEventoData } = require("./api/db");
-const { routerAgregarEvento, routerEditarEvento, routerObtenerEventosC } = require('./routes/addEventRoute');
+const { routerAgregarEvento, routerEditarEvento, routerObtenerEventosC } = require('./routes/rutasEvento');
 const userDataRouter = require('./routes/userDataRouter');
 const verifyGoogleLogin = require('./routes/rutasModuloLogin');
 const jwtCreate = require('./routes/sessionRoute');
@@ -15,7 +14,7 @@ const normalRegister = require('./routes/turaModuloRegistroNormal');
 const routerAgregarLugar = require('./routes/addPlaceRoute');
 const routerEliminarEvento = require('./routes/rutasEliminarEvento');
 const routerModificarPerfil = require('./routes/rutasModificarPerfil');
-const routerGetEventPlace = require('./routes/rutaGetEventPlace')
+const routerGetPlace = require('./routes/rutasLugar')
 
 
 app.use(cors(
@@ -64,9 +63,9 @@ app.use('/api', routerAgregarLugar);
 
 app.use('/api', routerEliminarEvento);
 
-app.use('/api',routerModificarPerfil);
+app.use('/api', routerModificarPerfil);
 
-app.use('/api' , routerGetEventPlace)
+app.use('/api', routerGetPlace)
 
 
 

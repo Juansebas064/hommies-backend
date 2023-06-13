@@ -1,5 +1,5 @@
 const express = require('express');
-const {agregarEvento, editarEvento, obtenerEventosC} = require('../controllers/addEventController.js');
+const { agregarEvento, editarEvento, obtenerEventosC } = require('../controllers/controladorEvento.js');
 const verificarAutenticacion = require('../middleware/verificarAutenticacion.js');
 
 const routerAgregarEvento = express.Router();
@@ -14,8 +14,8 @@ routerObtenerEventosC.get('/evento/obtenerC', verificarAutenticacion, obtenerEve
 
 
 module.exports = {
-    routerAgregarEvento: routerAgregarEvento,
-    routerEditarEvento: routerEditarEvento,
-    routerObtenerEventosC: routerObtenerEventosC
+  routerAgregarEvento: routerAgregarEvento,
+  routerEditarEvento: routerEditarEvento,
+  routerObtenerEventosC: routerObtenerEventosC
 };
 
