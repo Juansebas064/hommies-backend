@@ -176,7 +176,7 @@ const registrarPersonaNormal = async (req, res) => {
 
   }
 
-  const token = jwt.sign(datosToken, "ruizgei");
+  const token = jwt.sign(datosToken, "ds1g3");
   console.log(respuesta);
 
 
