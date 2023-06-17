@@ -5,18 +5,16 @@ const app = express();
 const port = 5000;
 const cors = require("cors");
 
-const { routerAgregarEvento, routerEditarEvento, routerObtenerEventosC } = require('./routes/rutasEvento');
+const { routerAgregarEvento, routerEditarEvento, routerObtenerEventosC, routerEliminar} = require('./routes/rutasEvento');
 const userDataRouter = require('./routes/userDataRouter');
 const verifyGoogleLogin = require('./routes/rutasModuloLogin');
 const jwtCreate = require('./routes/sessionRoute');
 const verifyGoogleRegister = require('./routes/rutasModuloRegistroGoogle');
 const normalRegister = require('./routes/turaModuloRegistroNormal');
 const routerAgregarLugar = require('./routes/addPlaceRoute');
-const routerEliminarEvento = require('./routes/rutasEliminarEvento');
 const routerModificarPerfil = require('./routes/rutasModificarPerfil');
-const routerGetPlace = require('./routes/rutasLugar')
-const routerRegistrarIntereses = require('./routes/rutasIntereses');
-const routerGetAllIntereses = require('./routes/rutasGetAllIntereses');
+const routerGetPlace = require('./routes/rutasLugar');
+const { routerModificarInteres, routerGetIntereses, routerInteresesUsuario } = require('./routes/rutasIntereses');
 
 
 app.use(cors(
@@ -37,6 +35,10 @@ app.use('/api', routerEditarEvento);
 //use para consultar eventos de la misma ciudad en la que vive el usuario loggeado
 app.use('/api', routerObtenerEventosC);
 
+//use para eñiminar un evento
+app.use('/api', routerEliminar);
+
+
 //use para crear y verificar el jwt con el boton de GOOGLE
 app.use('/api', verifyGoogleLogin);
 
@@ -52,26 +54,36 @@ app.use('/api', verifyGoogleRegister);
 
 
 //use para registrar una persona de forma normal
-
 app.use('/api', normalRegister);
+
 
 // use para obtener los datos del usuario al momento de hacer login
 
 app.use('/api', userDataRouter); /* /api/persona/consultar */
 
+
 //use para agregar lugar
 
 app.use('/api', routerAgregarLugar);
 
-app.use('/api', routerEliminarEvento);
+//use para modificar el perfil
 
 app.use('/api', routerModificarPerfil);
 
 app.use('/api', routerGetPlace);
 
-app.use('/api', routerGetAllIntereses);
 
-app.use('/api', routerRegistrarIntereses);
+//use para modificar y registrar los intereses de la persona
+
+app.use('/api', routerModificarInteres);
+
+//use para obtener todos los intereses de la base de datos
+
+app.use('/api', routerGetIntereses);
+
+//use para obtener todos los intereses del usuario
+
+app.use('/api', routerInteresesUsuario);
 
 
 app.listen(port, () => {

@@ -1,11 +1,21 @@
 const express = require('express');
 
-const routerRegistroInteres = express.Router();
+const routerModificarInteres = express.Router();
+const routerGetIntereses = express.Router();
+const routerInteresesUsuario = express.Router();
 
-const registrarInteres = require('../controllers/controladorModuloRegistrarInteres.js');
+const {interesesUsuario,getAllIntereses,modificarIntereses } = require('../controllers/controladorIntereses.js');
 
 const verificarAutenticacion = require('../middleware/verificarAutenticacion.js');
 
-routerRegistroInteres.post('/registrar/intereses', verificarAutenticacion, registrarInteres);
 
-module.exports = routerRegistroInteres;
+routerModificarInteres.post('/modificar/intereses', verificarAutenticacion, modificarIntereses);
+routerGetIntereses.get('/obtener/intereses', verificarAutenticacion, getAllIntereses);
+routerInteresesUsuario.post('/intereses/usuario', verificarAutenticacion, interesesUsuario);
+
+
+module.exports = {
+    routerModificarInteres: routerModificarInteres,
+    routerGetIntereses: routerGetIntereses,
+    routerInteresesUsuario: routerInteresesUsuario
+};
