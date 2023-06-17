@@ -11,7 +11,7 @@ const verificarAutenticacion = require('../middleware/verificarAutenticacion.js'
 
 routerModificarInteres.post('/persona/intereses/modificar', verificarAutenticacion, modificarIntereses);
 routerGetIntereses.get('/intereses/consultar', verificarAutenticacion, getAllIntereses);
-routerInteresesUsuario.post('/persona/intereses/consultar', verificarAutenticacion, interesesUsuario);
+routerInteresesUsuario.get('/persona/intereses/consultar', verificarAutenticacion, interesesUsuario);
 
 
 module.exports = {
