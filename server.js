@@ -5,7 +5,7 @@ const app = express();
 const port = 5000;
 const cors = require("cors");
 
-const { routerAgregarEvento, routerEditarEvento, routerObtenerEventosC } = require('./routes/rutasEvento');
+const { routerAgregarEvento, routerEditarEvento, routerObtenerEventosC, routerAnularInscripcionEvento } = require('./routes/rutasEvento');
 const userDataRouter = require('./routes/userDataRouter');
 const verifyGoogleLogin = require('./routes/rutasModuloLogin');
 const jwtCreate = require('./routes/sessionRoute');
@@ -36,6 +36,9 @@ app.use('/api', routerEditarEvento);
 
 //use para consultar eventos de la misma ciudad en la que vive el usuario loggeado
 app.use('/api', routerObtenerEventosC);
+
+//use para anular inscripciones de el usuario a un evento
+app.use('/api', routerAnularInscripcionEvento);
 
 //use para crear y verificar el jwt con el boton de GOOGLE
 app.use('/api', verifyGoogleLogin);
