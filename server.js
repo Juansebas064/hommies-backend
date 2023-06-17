@@ -15,6 +15,8 @@ const routerAgregarLugar = require('./routes/addPlaceRoute');
 const routerEliminarEvento = require('./routes/rutasEliminarEvento');
 const routerModificarPerfil = require('./routes/rutasModificarPerfil');
 const routerGetPlace = require('./routes/rutasLugar')
+const routerRegistrarIntereses = require('./routes/rutasIntereses');
+const routerGetAllIntereses = require('./routes/rutasGetAllIntereses');
 
 
 app.use(cors(
@@ -65,8 +67,11 @@ app.use('/api', routerEliminarEvento);
 
 app.use('/api', routerModificarPerfil);
 
-app.use('/api', routerGetPlace)
+app.use('/api', routerGetPlace);
 
+app.use('/api', routerGetAllIntereses);
+
+app.use('/api', routerRegistrarIntereses);
 
 
 app.listen(port, () => {
