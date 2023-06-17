@@ -80,8 +80,31 @@ const obtenerEventosC = async (req, res) => {
   }
 }
 
+const anularInscipcionEvento = async (req, res) => {
+  try {
+
+    const eventoAnular = await evento.findByPk(req.body.codigo_evento);
+
+    if(!eventoAnular){
+      res.status(404).json({error: 'El usuario no esta inscrito a este evento'});
+    }
+
+    const query = 'DELETE FROM evento_participa WHERE persona = $1 AND evento = $2;';
+    const datos = [req.id_usuario, req.body.codigo_evento];
+    
+    await pool.query(query, datos);
+
+    res.status(200).json({mensaje: 'Anulacion de inscripcion exitosa'});
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({error: 'error en el servidor'});
+  }
+}
+
 module.exports = {
   agregarEvento: agregarEvento,
   editarEvento: editarEvento,
-  obtenerEventosC: obtenerEventosC
+  obtenerEventosC: obtenerEventosC,
+  anularInscipcionEvento: anularInscipcionEvento
 };
