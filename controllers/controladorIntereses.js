@@ -26,6 +26,7 @@ const { pool } = require('../api/db.js');
 
         res.status(200).json(intereses);
     } catch (error) {
+        console.log(error);
         res.status(500).json({error: 'Error en el servidor'});
     }
   }
