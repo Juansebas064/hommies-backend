@@ -120,6 +120,18 @@ const generarIdentificadorUnico = () => {
   return identificador;
 }
 
+const uuidEventoParticipa = () => {
+  const fechaActual = new Date();
+  const mes = fechaActual.getMonth() + 1;
+  const dia = fechaActual.getDate();
+  const hora = fechaActual.getHours();
+  const minutos = fechaActual.getMinutes();
+
+  const identificador = `${mes}${dia}${hora}${minutos}`;
+
+  return identificador;
+}
+
 
 const encriptarPass = async (password) => {
 
@@ -194,5 +206,6 @@ module.exports = {
   registrarPersonaGoogle: registrarPersonaGoogle,
   registrarPersonaNormal: registrarPersonaNormal,
   sequelize: sequelize,
-  generarIdentificadorUnico: generarIdentificadorUnico
+  generarIdentificadorUnico: generarIdentificadorUnico,
+  uuidEventoParticipa: uuidEventoParticipa
 }

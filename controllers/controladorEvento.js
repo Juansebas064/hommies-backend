@@ -1,5 +1,5 @@
 const { pool } = require('../api/db.js');
-const { generarIdentificadorUnico } = require('../api/db.js');
+const { generarIdentificadorUnico, uuidEventoParticipa } = require('../api/db.js');
 const jwt = require('jsonwebtoken');
 const evento = require('../models/evento.js');
 
@@ -133,10 +133,45 @@ const anularInscipcionEvento = async (req, res) => {
   }
 }
 
+
+const inscripcionEvento = async (req, res) => {
+
+
+  try {
+    const {persona, evento} = req.body;
+    const codigo_evento_participa = uuidEventoParticipa();
+
+    const query = 'INSERT INTO public.evento_participa (codigo_evento_participa, persona, evento) VALUES($1, $2, $3);';
+    const values = [codigo_evento_participa, persona, evento]
+
+    await pool.query(query, values);
+    
+    res.status(200).json({message: 'Persona inscrita correctamente'})
+
+
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({error: 'Error al inscribirse al evento'})
+  }
+
+}
+
+
+const obtenerListaParticipantes = async (req, res) => {
+  try {
+    
+    
+  } catch (error) {
+    
+  }
+}
+
+
 module.exports = {
   agregarEvento: agregarEvento,
   editarEvento: editarEvento,
   obtenerEventosC: obtenerEventosC,
   eliminarEvento: eliminarEvento,
-  anularInscipcionEvento: anularInscipcionEvento
+  anularInscipcionEvento: anularInscipcionEvento,
+  inscripcionEvento: inscripcionEvento
 };

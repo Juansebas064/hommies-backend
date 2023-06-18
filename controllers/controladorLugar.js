@@ -20,6 +20,7 @@ const getLugares = async (req, res) => {
   }
 };
 
+
 module.exports = {
   getLugares
 };
