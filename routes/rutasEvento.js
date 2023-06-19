@@ -16,7 +16,7 @@ routerEditarEvento.put('/evento/editar/:codigo_evento', verificarAutenticacion, 
 routerAgregarEvento.post('/evento/agregar', verificarAutenticacion, agregarEvento);
 routerObtenerEventosC.get('/evento/obtenerC', verificarAutenticacion, obtenerEventosC);
 routerEliminar.post('/evento/eliminarEvento', verificarAutenticacion, eliminarEvento);
-routerAnularInscripcionEvento.delete('/evento/anular-inscripcion', verificarAutenticacion, anularInscipcionEvento);
+routerAnularInscripcionEvento.post('/evento/anular-inscripcion', verificarAutenticacion, anularInscipcionEvento);
 routerInscripcionEvento.post('/evento/inscribirse', verificarAutenticacion, inscripcionEvento);
 routerObtenerParticipantes.post('/evento/participantes', verificarAutenticacion, obtenerListaParticipantes)
 
