@@ -52,7 +52,7 @@ const persona = sequelize.define('persona', {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    token_session: {
+    token_recuperacion: {
       type: DataTypes.STRING,
     },
   },{
