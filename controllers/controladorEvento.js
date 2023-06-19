@@ -138,7 +138,8 @@ const inscripcionEvento = async (req, res) => {
 
 
   try {
-    const { persona, evento } = req.body;
+    const evento = req.body.codigo_evento;
+    const persona = req.id_usuario
     const codigo_evento_participa = uuidEventoParticipa();
 
     const query = 'INSERT INTO public.evento_participa (codigo_evento_participa, persona, evento) VALUES($1, $2, $3);';
