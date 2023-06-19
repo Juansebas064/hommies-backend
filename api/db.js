@@ -198,6 +198,21 @@ const registrarPersonaNormal = async (req, res) => {
 };
 
 
+
+const verificarCorreoExistente = async (correo) =>{
+  try {
+    const query = 'SELECT * FROM public.persona WHERE correo_electronico = $1'; 
+
+    const result = await pool.query(query, [correo]);
+
+    return result.rowCount > 0;
+  } catch (error) {
+    console.error('Error al verificar el correo en la base de datos', error);
+    throw error;
+  }
+}
+
+
 //module.exports = validarSesion;
 
 module.exports = {
@@ -207,5 +222,6 @@ module.exports = {
   registrarPersonaNormal: registrarPersonaNormal,
   sequelize: sequelize,
   generarIdentificadorUnico: generarIdentificadorUnico,
-  uuidEventoParticipa: uuidEventoParticipa
+  uuidEventoParticipa: uuidEventoParticipa,
+  verificarCorreoExistente: verificarCorreoExistente
 }
