@@ -173,6 +173,22 @@ const obtenerListaParticipantes = async (req, res) => {
 }
 
 
+const obtenerListaEventosLugar = async (req, res) => {
+  try {
+    
+    const codigo_lugar = req.body.codigo_lugar
+    const query = 'SELECT nombre FROM public.evento WHERE lugar = $1;'
+    const listaEventos = await pool.query(query, [codigo_lugar])
+
+    res.status(200).json(listaEventos)
+
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({error: 'Error al obtener la lista de eventos'})
+  }
+}
+
+
 module.exports = {
   agregarEvento: agregarEvento,
   editarEvento: editarEvento,
@@ -180,5 +196,6 @@ module.exports = {
   eliminarEvento: eliminarEvento,
   anularInscipcionEvento: anularInscipcionEvento,
   inscripcionEvento: inscripcionEvento,
-  obtenerListaParticipantes: obtenerListaParticipantes
+  obtenerListaParticipantes: obtenerListaParticipantes,
+  obtenerListaEventosLugar: obtenerListaEventosLugar
 };

@@ -5,7 +5,7 @@ const app = express();
 const port = 5000;
 const cors = require("cors");
 
-const { routerAgregarEvento, routerEditarEvento, routerObtenerEventosC, routerAnularInscripcionEvento, routerEliminar, routerInscripcionEvento, routerObtenerParticipantes } = require('./routes/rutasEvento');
+const { routerAgregarEvento, routerEditarEvento, routerObtenerEventosC, routerAnularInscripcionEvento, routerEliminar, routerInscripcionEvento, routerObtenerParticipantes, routerObtenerListaEventos } = require('./routes/rutasEvento');
 const userDataRouter = require('./routes/userDataRouter');
 const verifyGoogleLogin = require('./routes/rutasModuloLogin');
 const jwtCreate = require('./routes/sessionRoute');
@@ -91,6 +91,10 @@ app.use('/api', routerGetIntereses);
 //use para obtener todos los intereses del usuario
 
 app.use('/api', routerInteresesUsuario);
+
+//use para obtener todos los eventos de un lugar
+
+app.use('/api', routerObtenerListaEventos);
 
 
 app.listen(port, () => {
