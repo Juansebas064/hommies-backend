@@ -86,11 +86,11 @@ const obtenerEventosC = async (req, res) => {
 
 
 const eliminarEvento = async (req, res) => {
-    
-    
+
+
   const atributosActualizados = req.body;
 
- // console.log(atributosActualizados);
+  // console.log(atributosActualizados);
 
   try {
     const eventoExistente = await evento.findByPk(req.body.codigo_evento);
@@ -116,20 +116,20 @@ const anularInscipcionEvento = async (req, res) => {
 
     const eventoAnular = await evento.findByPk(req.body.codigo_evento);
 
-    if(!eventoAnular){
-      res.status(404).json({error: 'El usuario no esta inscrito a este evento'});
+    if (!eventoAnular) {
+      res.status(404).json({ error: 'El usuario no esta inscrito a este evento' });
     }
 
     const query = 'DELETE FROM evento_participa WHERE persona = $1 AND evento = $2;';
     const datos = [req.id_usuario, req.body.codigo_evento];
-    
+
     await pool.query(query, datos);
 
-    res.status(200).json({mensaje: 'Anulacion de inscripcion exitosa'});
+    res.status(200).json({ mensaje: 'Anulacion de inscripcion exitosa' });
 
   } catch (error) {
     console.log(error);
-    res.status(500).json({error: 'error en el servidor'});
+    res.status(500).json({ error: 'error en el servidor' });
   }
 }
 
@@ -138,20 +138,20 @@ const inscripcionEvento = async (req, res) => {
 
 
   try {
-    const {persona, evento} = req.body;
+    const { persona, evento } = req.body;
     const codigo_evento_participa = uuidEventoParticipa();
 
     const query = 'INSERT INTO public.evento_participa (codigo_evento_participa, persona, evento) VALUES($1, $2, $3);';
     const values = [codigo_evento_participa, persona, evento]
 
     await pool.query(query, values);
-    
-    res.status(200).json({message: 'Persona inscrita correctamente'})
+
+    res.status(200).json({ message: 'Persona inscrita correctamente' })
 
 
   } catch (error) {
     console.log(error)
-    res.status(400).json({error: 'Error al inscribirse al evento'})
+    res.status(400).json({ error: 'Error al inscribirse al evento' })
   }
 
 }
@@ -159,10 +159,15 @@ const inscripcionEvento = async (req, res) => {
 
 const obtenerListaParticipantes = async (req, res) => {
   try {
-    
-    
+    const codigo_evento = req.body.codigo_evento
+    const query = 'select p.* from persona p inner join evento_participa ep on p.id = ep.persona where ep.evento = $1'
+    const participantes = await pool.query(query, [codigo_evento])
+
+    res.status(200).json(participantes)
+
   } catch (error) {
-    
+    console.log(error)
+    res.status(400).json({ error: 'Error al obtener la lista de participantes' })
   }
 }
 
@@ -173,5 +178,6 @@ module.exports = {
   obtenerEventosC: obtenerEventosC,
   eliminarEvento: eliminarEvento,
   anularInscipcionEvento: anularInscipcionEvento,
-  inscripcionEvento: inscripcionEvento
+  inscripcionEvento: inscripcionEvento,
+  obtenerListaParticipantes: obtenerListaParticipantes
 };

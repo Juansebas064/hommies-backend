@@ -5,7 +5,7 @@ const app = express();
 const port = 5000;
 const cors = require("cors");
 
-const { routerAgregarEvento, routerEditarEvento, routerObtenerEventosC, routerAnularInscripcionEvento, routerEliminar,routerInscripcionEvento} = require('./routes/rutasEvento');
+const { routerAgregarEvento, routerEditarEvento, routerObtenerEventosC, routerAnularInscripcionEvento, routerEliminar, routerInscripcionEvento, routerObtenerParticipantes } = require('./routes/rutasEvento');
 const userDataRouter = require('./routes/userDataRouter');
 const verifyGoogleLogin = require('./routes/rutasModuloLogin');
 const jwtCreate = require('./routes/sessionRoute');
@@ -43,6 +43,8 @@ app.use('/api', routerEliminar);
 
 //
 app.use('/api', routerInscripcionEvento);
+
+app.use('/api', routerObtenerParticipantes);
 
 //use para crear y verificar el jwt con el boton de GOOGLE
 app.use('/api', verifyGoogleLogin);

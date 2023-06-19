@@ -1,5 +1,5 @@
 const express = require('express');
-const { agregarEvento, editarEvento, obtenerEventosC, anularInscipcionEvento, eliminarEvento, inscripcionEvento} = require('../controllers/controladorEvento.js');
+const { agregarEvento, editarEvento, obtenerEventosC, anularInscipcionEvento, eliminarEvento, inscripcionEvento, obtenerListaParticipantes } = require('../controllers/controladorEvento.js');
 const verificarAutenticacion = require('../middleware/verificarAutenticacion.js');
 
 const routerAgregarEvento = express.Router();
@@ -7,8 +7,9 @@ const routerEditarEvento = express.Router();
 const routerObtenerEventosC = express.Router();
 const routerEliminar = express.Router();
 
-const routerAnularInscripcionEvento =express.Router();
+const routerAnularInscripcionEvento = express.Router();
 const routerInscripcionEvento = express.Router();
+const routerObtenerParticipantes = express.Router();
 
 
 routerEditarEvento.put('/evento/editar/:codigo_evento', verificarAutenticacion, editarEvento);
@@ -17,6 +18,7 @@ routerObtenerEventosC.get('/evento/obtenerC', verificarAutenticacion, obtenerEve
 routerEliminar.post('/evento/eliminarEvento', verificarAutenticacion, eliminarEvento);
 routerAnularInscripcionEvento.delete('/evento/anular-inscripcion', verificarAutenticacion, anularInscipcionEvento);
 routerInscripcionEvento.post('/evento/inscribirse', verificarAutenticacion, inscripcionEvento);
+routerObtenerParticipantes.post('/evento/participantes', verificarAutenticacion, obtenerListaParticipantes)
 
 
 
@@ -26,6 +28,7 @@ module.exports = {
   routerObtenerEventosC: routerObtenerEventosC,
   routerEliminar: routerEliminar,
   routerAnularInscripcionEvento: routerAnularInscripcionEvento,
-  routerInscripcionEvento: routerInscripcionEvento
+  routerInscripcionEvento: routerInscripcionEvento,
+  routerObtenerParticipantes: routerObtenerParticipantes
 };
 
