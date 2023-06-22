@@ -39,6 +39,8 @@ const { pool } = require('../api/db.js');
 
 //-------------------//REGISTRO Y MODIFICACION DE INTERESES\\------------------------\\ 
 
+//----//SE REUTILIZO TODO EL CODIGO PARA QUE SIRVA TANTO PARA PERSONAS COMO PARA EVENTOS\\----\\
+
 
 
 //funcion para obtener solo los codigos de los intereses que envia el front (no se llaman igual, por eso se tiene 2 funciones para lo mismo)
@@ -57,13 +59,13 @@ const separarCodigoInteresConsultados = (array) => {
 };
 
 
-//funcion para ingresar un interes que la persona no tenga en la bd
-const ingresarNuevoInteres = async (codigoInteres, idPersona) => {
+//funcion para ingresar un interes que  no se tenga en la bd
+const ingresarNuevoInteres = async (codigoInteres, idorigen, origen) => {
 
   try {
 
-    const codigo_interes_persona = codigoInteres + idPersona;
-    const respuesta = await pool.query(`INSERT INTO interes_persona (codigo_interes_persona, persona, interes) VALUES ('${codigo_interes_persona}', '${idPersona}', '${codigoInteres}')`);
+    const codigo_interes_origen= codigoInteres + idorigen;
+    const respuesta = await pool.query(`INSERT INTO interes_${origen} (codigo_interes_${origen}, ${origen}, interes) VALUES ('${codigo_interes_origen}', '${idorigen}', '${codigoInteres}')`);
    // console.log(respuesta);
    
   } catch (error) {
@@ -72,13 +74,13 @@ const ingresarNuevoInteres = async (codigoInteres, idPersona) => {
   }
 };
 
-//funcion para eliminar un interes que la persona tenga en la bd pero que lo desee eliminar
-const EliminarInteresPersona = async (codigoInteres, idPersona) => {
+//funcion para eliminar un interes que se tenga en la bd pero que lo desee eliminar
+const EliminarInteres = async (codigoInteres, idorigen, origen) => {
 
   try {
 
-    const codigo_interes_persona = codigoInteres + idPersona;
-    const respuesta = await pool.query(`DELETE FROM interes_persona WHERE (codigo_interes_persona = '${codigo_interes_persona}')`);
+    const codigo_interes_origen = codigoInteres + idorigen;
+    const respuesta = await pool.query(`DELETE FROM interes_${origen} WHERE (codigo_interes_persona = '${codigo_interes_origen}')`);
   //  console.log(respuesta);
 
    
@@ -89,10 +91,10 @@ const EliminarInteresPersona = async (codigoInteres, idPersona) => {
 };
 
  
-const compararCodigosPersona = async(array, idPersona) => {
+const compararCodigos = async(array, idorigen, origen) => {
 
   try {
-    const respuesta = await pool.query(`SELECT interes FROM interes_persona WHERE (persona = '${idPersona}')`);
+    const respuesta = await pool.query(`SELECT interes FROM interes_${origen} WHERE (${origen} = '${idorigen}')`);
 // console.log(respuesta.rows);
     //intereses que manda el front
     const interesesIngresadosSeparados = array.map(separarCodigoInteresIngresados);
@@ -118,7 +120,7 @@ const compararCodigosPersona = async(array, idPersona) => {
 
       if (!bandera) { // si no esta el interes ingresado en consultados, indica que es un interes nuevo para la persona y se debe ingresar a la bd
         
-       ingresarNuevoInteres(interes, idPersona);
+       ingresarNuevoInteres(interes, idorigen, origen);
 
       } else { 
         
@@ -138,7 +140,7 @@ const compararCodigosPersona = async(array, idPersona) => {
       if (!bandera) { // si no esta el interes consultado en INGRESADO,
         // indica que es un interes que ya no tiene la persona y debe eliminarse
         
-        EliminarInteresPersona(interes, idPersona);
+        EliminarInteres(interes, idorigen, origen);
 
       } else {
         
@@ -148,7 +150,7 @@ const compararCodigosPersona = async(array, idPersona) => {
 
     });
 
-    const respuesta = "Se actualizaron los intereses de la persona";
+    const respuesta = `Se actualizaron los intereses de ${origen}`;
     console.log(respuesta);
     return respuesta;
 
@@ -156,12 +158,12 @@ const compararCodigosPersona = async(array, idPersona) => {
 
       interesesIngresadosSeparados.forEach(interes => {
         
-      ingresarNuevoInteres(interes, idPersona);
+      ingresarNuevoInteres(interes, idorigen, origen);
 
       });
 
 
-      const respuesta = "Se registraron los intereses de la persona";
+      const respuesta = `Se registraron los intereses de ${origen}`;
       console.log(respuesta);
       return respuesta
     }
@@ -185,14 +187,33 @@ const compararCodigosPersona = async(array, idPersona) => {
 
     try {
 
-      const respuesta = await compararCodigosPersona(req.body,req.id_usuario);
+      const respuesta = await compararCodigos(req.body,req.id_usuario, 'persona');
      
       res.send(respuesta);
      
     } catch (error) {
      
       console.log(error);
-    }
+    } 
+  };
+
+  const modificarInteresesEvento = async (req,res) => {
+
+    console.log("entro en modificar intereses del evento")
+
+  //  console.log(req.body);
+  //  console.log(req.id_usuario);  
+
+    try {
+
+      const respuesta = await compararCodigos(req.body,req.headers.eventoid, 'evento');
+     
+      res.send(respuesta);
+     
+    } catch (error) {
+     
+      console.log(error);
+    } 
   };
 
 
@@ -201,5 +222,6 @@ const compararCodigosPersona = async(array, idPersona) => {
 module.exports = {
     getAllIntereses: getAllIntereses,
     interesesUsuario: interesesUsuario,
-    modificarIntereses:modificarIntereses
+    modificarIntereses:modificarIntereses,
+    modificarInteresesEvento:modificarInteresesEvento
 };

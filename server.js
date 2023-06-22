@@ -14,7 +14,7 @@ const normalRegister = require('./routes/turaModuloRegistroNormal');
 const routerAgregarLugar = require('./routes/addPlaceRoute');
 const routerModificarPerfil = require('./routes/rutasModificarPerfil');
 const routerGetPlace = require('./routes/rutasLugar');
-const { routerModificarInteres, routerGetIntereses, routerInteresesUsuario } = require('./routes/rutasIntereses');
+const { routerModificarInteres, routerGetIntereses, routerInteresesUsuario, routerInteresesEvento} = require('./routes/rutasIntereses');
 const routerRecoverPass = require('./routes/recoverPassword')
 
 
@@ -93,12 +93,18 @@ app.use('/api', routerGetIntereses);
 
 app.use('/api', routerInteresesUsuario);
 
+//use para registrar los intereses de un evento
+
+app.use('/api', routerInteresesEvento);
+
 //use para obtener todos los eventos de un lugar
 
 app.use('/api', routerObtenerListaEventos);
 
 //use para recuperar contraseña
 app.use('/api', routerRecoverPass)
+
+
 
 
 app.listen(port, () => {
