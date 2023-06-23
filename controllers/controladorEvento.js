@@ -85,6 +85,42 @@ const obtenerEventosC = async (req, res) => {
 //ELIMINAR EVENTO
 
 
+const eliminarDeParticipa = async (idEvento) =>{
+
+
+  try {
+
+    const respuesta = await pool.query(`DELETE FROM evento_participa WHERE (evento = '${idEvento}')`);
+
+    console.log(respuesta);
+
+   
+  } catch (error) {
+   
+    console.log(error);
+  }
+
+
+ }
+
+ const eliminarDeintereses = async (idEvento) =>{
+
+  try {
+
+    const respuesta = await pool.query(`DELETE FROM interes_evento WHERE (evento = '${idEvento}')`);
+
+    console.log(respuesta);
+   
+  } catch (error) {
+   
+    console.log(error);
+  }
+
+  
+}
+
+
+
 const eliminarEvento = async (req, res) => {
 
 
@@ -101,6 +137,11 @@ const eliminarEvento = async (req, res) => {
     }
 
     await eventoExistente.destroy();
+    await eliminarDeParticipa(req.body.codigo_evento);
+    await eliminarDeintereses(req.body.codigo_evento);
+
+
+
 
     return res.status(200).json({ message: 'Evento eliminado exitosamente' });
   } catch (error) {
