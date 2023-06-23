@@ -1,8 +1,16 @@
 const express = require('express');
 const routerGetPlace = express.Router();
-const { getLugares } = require('../controllers/controladorLugar.js')
+const routerAgregarLugar = express.Router()
+
+const { getLugares, agregarLugar} = require('../controllers/controladorLugar.js')
 const verificarAutenticacion = require('../middleware/verificarAutenticacion.js');
 
-routerGetPlace.get('/lugar/consultar', verificarAutenticacion, getLugares)
+const upload = require('../api/multer.js')
 
-module.exports = routerGetPlace
+routerGetPlace.get('/lugar/consultar', verificarAutenticacion, getLugares);
+routerAgregarLugar.post('/lugar', upload.single("foto"), verificarAutenticacion ,agregarLugar);
+
+module.exports = {
+    routerGetPlace: routerGetPlace,
+    routerAgregarLugar: routerAgregarLugar,
+}

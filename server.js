@@ -11,9 +11,8 @@ const verifyGoogleLogin = require('./routes/rutasModuloLogin');
 const jwtCreate = require('./routes/sessionRoute');
 const verifyGoogleRegister = require('./routes/rutasModuloRegistroGoogle');
 const normalRegister = require('./routes/turaModuloRegistroNormal');
-const routerAgregarLugar = require('./routes/addPlaceRoute');
 const routerModificarPerfil = require('./routes/rutasModificarPerfil');
-const routerGetPlace = require('./routes/rutasLugar');
+const {routerGetPlace, routerAgregarLugar }= require('./routes/rutasLugar');
 const { routerModificarInteres, routerGetIntereses, routerInteresesUsuario, routerInteresesEvento} = require('./routes/rutasIntereses');
 const routerRecoverPass = require('./routes/recoverPassword')
 
