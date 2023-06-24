@@ -25,7 +25,7 @@ const agregarLugar = async (req, res) => {
     
   try {
       const datosNuevoLugar = req.body;
-      const foto = req.file.path; // Obtén la ruta de la imagen generada por Multer
+      const foto = req.file ? req.file.path : undefined;
       const codigo_lugar = uuidLugar();
       datosNuevoLugar.foto=foto;
       datosNuevoLugar.codigo_lugar=codigo_lugar;
