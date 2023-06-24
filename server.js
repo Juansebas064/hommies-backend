@@ -15,6 +15,7 @@ const routerModificarPerfil = require('./routes/rutasModificarPerfil');
 const {routerGetPlace, routerAgregarLugar }= require('./routes/rutasLugar');
 const { routerModificarInteres, routerGetIntereses, routerInteresesUsuario, routerInteresesEvento} = require('./routes/rutasIntereses');
 const routerRecoverPass = require('./routes/recoverPassword')
+const {routerGetCiudad} = require('./routes/rutasCiudad')
 
 
 app.use(cors(
@@ -102,6 +103,9 @@ app.use('/api', routerObtenerListaEventos);
 
 //use para recuperar contraseña
 app.use('/api', routerRecoverPass)
+
+//use para obtener ciudad del usuario
+app.use('/api', routerGetCiudad)
 
 
 
