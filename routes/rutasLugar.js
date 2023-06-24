@@ -17,7 +17,7 @@ const optionalUpload = (req, res, next) => {
   };
 
 routerGetPlace.get('/lugar/consultar', verificarAutenticacion, getLugares);
-routerAgregarLugar.post('/lugar', optionalUpload ,upload.single("foto"), verificarAutenticacion ,agregarLugar);
+routerAgregarLugar.post('/lugar/crear', optionalUpload ,upload.single("foto"), verificarAutenticacion ,agregarLugar);
 
 module.exports = {
     routerGetPlace: routerGetPlace,
