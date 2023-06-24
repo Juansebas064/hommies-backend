@@ -9,7 +9,7 @@ const agregarEvento = async (req, res) => {
   try {
 
     const datosNuevoEvento = req.body;
-    const codigo_evento = generarIdentificadorUnico()
+    const codigo_evento = generarIdentificadorUnico();
     datosNuevoEvento.codigo_evento = codigo_evento
     console.log(datosNuevoEvento.codigo_evento)
     const { id } = jwt.verify(req.headers.authorization, 'ds1g3');
@@ -29,7 +29,7 @@ const agregarEvento = async (req, res) => {
       creador: datosNuevoEvento.creador
     })
 
-    res.status(200).json({ mensaje: 'Evento agregado exitosamente' });
+    res.status(200).json({ mensaje: 'Evento agregado exitosamente', idEvento: codigo_evento});
   } catch (error) {
     console.error('Error al agregar el evento:', error);
     res.status(500).json({ error: 'Error al agregar el evento' });
