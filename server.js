@@ -1,9 +1,13 @@
+
+
 const apiMessage = require('./api/utils');
 
 const express = require('express');
 const app = express();
 const port = 5000;
 const cors = require("cors");
+const {join, dirname} = require('path');
+//const url = require('meta');
 
 const { routerAgregarEvento, routerEditarEvento, routerObtenerEventosC, routerAnularInscripcionEvento, routerEliminar, routerInscripcionEvento, routerObtenerParticipantes, routerObtenerListaEventos } = require('./routes/rutasEvento');
 const userDataRouter = require('./routes/userDataRouter');
@@ -14,8 +18,9 @@ const normalRegister = require('./routes/turaModuloRegistroNormal');
 const routerModificarPerfil = require('./routes/rutasModificarPerfil');
 const {routerGetPlace, routerAgregarLugar }= require('./routes/rutasLugar');
 const { routerModificarInteres, routerGetIntereses, routerInteresesUsuario, routerInteresesEvento} = require('./routes/rutasIntereses');
-const routerRecoverPass = require('./routes/recoverPassword')
-const {routerGetCiudad} = require('./routes/rutasCiudad')
+const routerRecoverPass = require('./routes/recoverPassword');
+const {routerGetCiudad} = require('./routes/rutasCiudad');
+
 
 
 app.use(cors(
@@ -102,11 +107,22 @@ app.use('/api', routerInteresesEvento);
 app.use('/api', routerObtenerListaEventos);
 
 //use para recuperar contraseña
-app.use('/api', routerRecoverPass)
+app.use('/api', routerRecoverPass);
 
 //use para obtener ciudad del usuario
 app.use('/api', routerGetCiudad)
 
+
+
+
+//incio pruebas para mandar fotos al front
+//NOTA: NO BORRRAR NI REFACTORIZAR
+//Ya se intento y no sirve jsjs
+const current = dirname(require.main.filename);
+console.log(current);
+
+app.use('/api/img', express.static(join(current, 'api/img')));
+//fin pruebas para mandar fotos al front
 
 
 
