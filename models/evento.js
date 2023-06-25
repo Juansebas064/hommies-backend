@@ -36,7 +36,7 @@ const evento = sequelize.define('evento', {
       allowNull: false,
     },
     creador: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: true,
       references: {
         model: persona,
