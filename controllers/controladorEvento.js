@@ -201,11 +201,21 @@ const inscripcionEvento = async (req, res) => {
 
 const obtenerListaParticipantes = async (req, res) => {
   try {
-    const codigo_evento = req.body.codigo_evento
-    const query = 'select p.* from persona p inner join evento_participa ep on p.id = ep.persona where ep.evento = $1'
-    const participantes = await pool.query(query, [codigo_evento])
+    const codigo_evento = req.body.codigo_evento;
+    const query = 'select p.* from persona p inner join evento_participa ep on p.id = ep.persona where ep.evento = $1';
+    const participantes = await pool.query(query, [codigo_evento]);
 
-    res.status(200).json(participantes)
+    const eventoActual = await evento.findByPk(codigo_evento);
+
+    let participantesOrganizar = JSON.parse(JSON.stringify(participantes));
+
+    const creador = participantesOrganizar.rows.filter(e => e.id === eventoActual.creador);
+    
+    const participantesSinCreador = participantesOrganizar.rows.filter(e => e.id !== eventoActual.creador);
+
+    participantesOrganizar.rows = creador.concat(participantesSinCreador);
+
+    res.status(200).json(participantesOrganizar);
 
   } catch (error) {
     console.log(error)
