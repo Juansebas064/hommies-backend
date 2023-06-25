@@ -29,7 +29,7 @@ const agregarEvento = async (req, res) => {
       creador: datosNuevoEvento.creador
     })
 
-    res.status(200).json({ mensaje: 'Evento agregado exitosamente', idEvento: codigo_evento});
+    res.status(200).json({ mensaje: 'Evento agregado exitosamente', idEvento: codigo_evento });
   } catch (error) {
     console.error('Error al agregar el evento:', error);
     res.status(500).json({ error: 'Error al agregar el evento' });
@@ -85,7 +85,7 @@ const obtenerEventosC = async (req, res) => {
 //ELIMINAR EVENTO
 
 
-const eliminarDeParticipa = async (idEvento) =>{
+const eliminarDeParticipa = async (idEvento) => {
 
 
   try {
@@ -94,29 +94,29 @@ const eliminarDeParticipa = async (idEvento) =>{
 
     console.log(respuesta);
 
-   
+
   } catch (error) {
-   
+
     console.log(error);
   }
 
 
- }
+}
 
- const eliminarDeintereses = async (idEvento) =>{
+const eliminarDeintereses = async (idEvento) => {
 
   try {
 
     const respuesta = await pool.query(`DELETE FROM interes_evento WHERE (evento = '${idEvento}')`);
 
     console.log(respuesta);
-   
+
   } catch (error) {
-   
+
     console.log(error);
   }
 
-  
+
 }
 
 
@@ -136,9 +136,9 @@ const eliminarEvento = async (req, res) => {
       return res.status(404).json({ message: 'El evento a eliminar no existeeeeee' });
     }
 
-    await eventoExistente.destroy();
     await eliminarDeParticipa(req.body.codigo_evento);
     await eliminarDeintereses(req.body.codigo_evento);
+    await eventoExistente.destroy();
 
 
 
@@ -226,7 +226,7 @@ const obtenerListaParticipantes = async (req, res) => {
 
 const obtenerListaEventosLugar = async (req, res) => {
   try {
-    
+
     const codigo_lugar = req.body.codigo_lugar
     const query = 'SELECT nombre FROM public.evento WHERE lugar = $1;'
     const listaEventos = await pool.query(query, [codigo_lugar])
@@ -235,7 +235,7 @@ const obtenerListaEventosLugar = async (req, res) => {
 
   } catch (error) {
     console.log(error)
-    res.status(400).json({error: 'Error al obtener la lista de eventos'})
+    res.status(400).json({ error: 'Error al obtener la lista de eventos' })
   }
 }
 
