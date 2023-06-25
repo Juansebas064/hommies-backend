@@ -51,7 +51,33 @@ const agregarLugar = async (req, res) => {
   };
 
 
+  const eliminarLugar = async (req, res) => {
+
+    try {
+
+      const codigo_lugar = req.body.codigo_lugar;
+      const lugarActual = await lugar.findByPk(codigo_lugar);
+      const id_usuario = req.id_usuario;
+      console.log(id_usuario, typeof(id_usuario));
+      console.log(lugarActual.descripcion, typeof(lugarActual.descripcion));
+
+      if (lugarActual.creador !== id_usuario) {
+        res.status(401).json({error: "Usuario no autorizado"});
+      }
+
+      lugarActual.estado = 'inactivo';
+      await lugarActual.save();
+
+      res.status(200).json({mensaje: "El lugar fue \"eliminado\" con exito"});
+
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({error: "Error en el servidor"});
+    }
+  };
+
 module.exports = {
   getLugares: getLugares,
-  agregarLugar: agregarLugar
+  agregarLugar: agregarLugar,
+  eliminarLugar: eliminarLugar
 };
