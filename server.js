@@ -16,7 +16,7 @@ const jwtCreate = require('./routes/sessionRoute');
 const verifyGoogleRegister = require('./routes/rutasModuloRegistroGoogle');
 const normalRegister = require('./routes/turaModuloRegistroNormal');
 const routerModificarPerfil = require('./routes/rutasModificarPerfil');
-const {routerGetPlace, routerAgregarLugar }= require('./routes/rutasLugar');
+const {routerGetPlace, routerAgregarLugar, routerEliminarLugar }= require('./routes/rutasLugar');
 const { routerModificarInteres, routerGetIntereses, routerInteresesUsuario, routerInteresesEvento} = require('./routes/rutasIntereses');
 const routerRecoverPass = require('./routes/recoverPassword');
 const {routerGetCiudad} = require('./routes/rutasCiudad');
@@ -78,6 +78,9 @@ app.use('/api', userDataRouter); /* /api/persona/consultar */
 //use para agregar lugar
 
 app.use('/api', routerAgregarLugar);
+
+//use para eliminar logicamente un lugar (inactivarlo)
+app.use('/api', routerEliminarLugar);
 
 //use para modificar el perfil
 
