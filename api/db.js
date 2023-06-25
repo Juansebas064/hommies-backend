@@ -87,8 +87,8 @@ const registrarPersonaGoogle = async (req, res) => {
   console.log(req);
 
   const respuesta = await pool.query(`INSERT INTO persona(
-    id, nickname, nombre, apellido, foto, correo_electronico)
-    VALUES ('${req.id}','${req.nickname}','${req.firstName}', '${req.lastName}', '${req.picture}', '${req.email}');`);
+    id, tipo_de_usuario, nickname, nombre, apellido, foto, correo_electronico)
+    VALUES ('${req.id}', 'Google','${req.nickname}','${req.firstName}', '${req.lastName}', '${req.picture}', '${req.email}');`);
 
   const datosToken = {
 
@@ -178,8 +178,8 @@ const registrarPersonaNormal = async (req, res) => {
 
 
   const respuesta = await pool.query(`INSERT INTO persona(
-    id, nickname, nombre, apellido, "contraseña", correo_electronico)
-    VALUES ('${id}','${req.nickname}','${req.nombre}', '${req.apellido}', '${password}', '${req.email}');`);
+    id, tipo_de_usuario, nickname, nombre, apellido, "contraseña", correo_electronico)
+    VALUES ('${id}', 'Normal','${req.nickname}','${req.nombre}', '${req.apellido}', '${password}', '${req.email}');`);
 
 
   const datosToken = {
