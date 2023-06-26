@@ -29,7 +29,7 @@ const agregarEvento = async (req, res, next) => {
       creador: req.id_usuario
     })
 
-    // res.status(200).json({ mensaje: 'Evento agregado exitosamente', idEvento: codigo_evento });
+    //res.status(200).json({ mensaje: 'Evento agregado exitosamente', idEvento: codigo_evento });
 
     req.body.codigo_evento = datosNuevoEvento.codigo_evento
 
@@ -193,7 +193,7 @@ const inscripcionEvento = async (req, res) => {
 
     await pool.query(query, values);
 
-    res.status(200).json({ message: 'Persona inscrita correctamente' })
+    res.status(200).json({ message: 'Persona inscrita correctamente', idEvento: evento })
 
 
   } catch (error) {
