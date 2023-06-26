@@ -1,5 +1,5 @@
 const express = require('express');
-const { agregarEvento, editarEvento, obtenerEventosC, anularInscipcionEvento, eliminarEvento, inscripcionEvento, obtenerListaParticipantes,  obtenerListaEventosLugar} = require('../controllers/controladorEvento.js');
+const { agregarEvento, editarEvento, obtenerEventosC, anularInscipcionEvento, eliminarEvento, inscripcionEvento, obtenerListaParticipantes, obtenerListaEventosLugar } = require('../controllers/controladorEvento.js');
 const verificarAutenticacion = require('../middleware/verificarAutenticacion.js');
 
 const routerAgregarEvento = express.Router();
@@ -14,13 +14,13 @@ const routerObtenerListaEventos = express.Router();
 
 
 routerEditarEvento.put('/evento/editar/:codigo_evento', verificarAutenticacion, editarEvento);
-routerAgregarEvento.post('/evento/agregar', verificarAutenticacion, agregarEvento);
+routerAgregarEvento.post('/evento/agregar', verificarAutenticacion, agregarEvento, inscripcionEvento);
 routerObtenerEventosC.get('/evento/obtenerC', verificarAutenticacion, obtenerEventosC);
 routerEliminar.post('/evento/eliminarEvento', verificarAutenticacion, eliminarEvento);
 routerAnularInscripcionEvento.post('/evento/anular-inscripcion', verificarAutenticacion, anularInscipcionEvento);
 routerInscripcionEvento.post('/evento/inscribirse', verificarAutenticacion, inscripcionEvento);
 routerObtenerParticipantes.post('/evento/participantes', verificarAutenticacion, obtenerListaParticipantes);
-routerObtenerListaEventos.post('/evento/evento-lugar/lista', verificarAutenticacion ,obtenerListaEventosLugar);
+routerObtenerListaEventos.post('/evento/evento-lugar/lista', verificarAutenticacion, obtenerListaEventosLugar);
 
 
 

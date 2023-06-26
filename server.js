@@ -6,7 +6,7 @@ const express = require('express');
 const app = express();
 const port = 5000;
 const cors = require("cors");
-const {join, dirname} = require('path');
+const { join, dirname } = require('path');
 //const url = require('meta');
 
 const { routerAgregarEvento, routerEditarEvento, routerObtenerEventosC, routerAnularInscripcionEvento, routerEliminar, routerInscripcionEvento, routerObtenerParticipantes, routerObtenerListaEventos } = require('./routes/rutasEvento');
@@ -16,10 +16,10 @@ const jwtCreate = require('./routes/sessionRoute');
 const verifyGoogleRegister = require('./routes/rutasModuloRegistroGoogle');
 const normalRegister = require('./routes/turaModuloRegistroNormal');
 const routerModificarPerfil = require('./routes/rutasModificarPerfil');
-const {routerGetPlace, routerAgregarLugar, routerEliminarLugar }= require('./routes/rutasLugar');
-const { routerModificarInteres, routerGetIntereses, routerInteresesUsuario, routerInteresesEvento} = require('./routes/rutasIntereses');
+const { routerGetPlace, routerAgregarLugar, routerEliminarLugar } = require('./routes/rutasLugar');
+const { routerModificarInteres, routerGetIntereses, routerInteresesUsuario, routerInteresesEvento, routerGetInteresesEvento } = require('./routes/rutasIntereses');
 const routerRecoverPass = require('./routes/recoverPassword');
-const {routerGetCiudad} = require('./routes/rutasCiudad');
+const { routerGetCiudad } = require('./routes/rutasCiudad');
 
 
 
@@ -104,6 +104,10 @@ app.use('/api', routerInteresesUsuario);
 //use para registrar los intereses de un evento
 
 app.use('/api', routerInteresesEvento);
+
+// use para obtener todos los intereses de un evento
+
+app.use('/api', routerGetInteresesEvento)
 
 //use para obtener todos los eventos de un lugar
 

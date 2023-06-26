@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const evento = require('../models/evento.js');
 
 //Codigo que a traves de una consulta SQL manda toda la informacion que el front proporciona y crea un nuevo evento en la base de datos
-const agregarEvento = async (req, res) => {
+const agregarEvento = async (req, res, next) => {
 
   try {
 
@@ -29,7 +29,12 @@ const agregarEvento = async (req, res) => {
       creador: datosNuevoEvento.creador
     })
 
-    res.status(200).json({ mensaje: 'Evento agregado exitosamente', idEvento: codigo_evento });
+    // res.status(200).json({ mensaje: 'Evento agregado exitosamente', idEvento: codigo_evento });
+
+    req.body.codigo_evento = datosNuevoEvento.codigo_evento
+
+    next()
+
   } catch (error) {
     console.error('Error al agregar el evento:', error);
     res.status(500).json({ error: 'Error al agregar el evento' });
@@ -210,7 +215,7 @@ const obtenerListaParticipantes = async (req, res) => {
     let participantesOrganizar = JSON.parse(JSON.stringify(participantes));
 
     const creador = participantesOrganizar.rows.filter(e => e.id === eventoActual.creador);
-    
+
     const participantesSinCreador = participantesOrganizar.rows.filter(e => e.id !== eventoActual.creador);
 
     participantesOrganizar.rows = creador.concat(participantesSinCreador);
