@@ -26,7 +26,7 @@ const agregarEvento = async (req, res, next) => {
       hora_inicio: datosNuevoEvento.hora_inicio,
       hora_final: datosNuevoEvento.hora_final,
       lugar: datosNuevoEvento.lugar,
-      creador: datosNuevoEvento.creador
+      creador: req.id_usuario
     })
 
     // res.status(200).json({ mensaje: 'Evento agregado exitosamente', idEvento: codigo_evento });
