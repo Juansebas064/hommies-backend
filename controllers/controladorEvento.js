@@ -2,6 +2,7 @@ const { pool } = require('../api/db.js');
 const { generarIdentificadorUnico, uuidEventoParticipa } = require('../api/db.js');
 const jwt = require('jsonwebtoken');
 const evento = require('../models/evento.js');
+const persona = require('../models/persona.js');
 
 //Codigo que a traves de una consulta SQL manda toda la informacion que el front proporciona y crea un nuevo evento en la base de datos
 const agregarEvento = async (req, res, next) => {
@@ -66,18 +67,183 @@ const editarEvento = async (req, res) => {
   }
 };
 
+
+
+//Metodos de logica para el filtrado de lugares por interes de persona
+//NOTA: COMO NO SE PUEDE UTILIZAR UN CONTROLARO EN oTRO, SE DEBERA DE CREAR METODOS APARTE
+
+const obtenerSoloEventosId = (eventos) => {
+
+  const eventosId = eventos.map(function(elemento) {
+
+    return elemento.codigo_evento;
+  } );
+
+  return eventosId;
+
+}
+
+
+
+
+const obtenerInteresesEventos = async (eventosId) =>{
+
+
+  const interesesEventos1 = await eventosId.map(async function(elemento) {
+
+    try {
+      console.log(elemento)
+     // const query = 'select i.* from interes AS i inner join interes_evento AS ie on i.codigo_interes = ie.interes where ie.evento  = $1;';
+      const intereses = await pool.query(`select i.* from interes AS i inner join interes_evento AS ie on i.codigo_interes = ie.interes where ie.evento  = '${elemento}';`);
+  
+      if (!intereses.rowCount) {
+        return "el evento no tiene intereses, como raro a estas alturas";
+      }
+
+    //  console.log(intereses)
+      return intereses.rows;
+    } catch (error) {
+      console.log(error);
+      console.log("error en la consulta de intereses eventos");
+    }
+
+
+  });
+
+  const interesesEventos = Promise.all(interesesEventos1);
+  return interesesEventos;
+
+}
+
+const obtenerInteresesPersona = async (personaId) => {
+
+
+  try {
+
+    const respuesta = await pool.query(`SELECT interes FROM interes_persona WHERE (persona = '${personaId}')`);
+     // console.log(respuesta);
+
+    return respuesta.rows;
+
+
+  } catch (error) {
+
+    console.log(error);
+  }
+  
+
+
+
+
+}
+
+//funcion la cual normalizara el json para que pueda ser compatible con 
+const normalizarJson =(iEvento) => {
+
+  const jsonNormalizado = iEvento.map(function(elemento) {
+
+    const elemento1 = Object.values(elemento);
+
+    const yanose = elemento1.map(function(elemento2) {
+
+      return {'interes':elemento2.codigo_interes};
+
+    });
+    return yanose;
+
+
+  });
+
+  return jsonNormalizado;
+
+}
+
+const compararIntereses = (eventos, iEvento, iPersona ) => {
+
+  
+
+  const interesesEventoNormalizados = normalizarJson(iEvento);
+
+  let contador = 0;
+  const eventosFiltrados = []; //array definitivo
+
+  //console.log(interesesEventoNormalizados);
+
+  interesesEventoNormalizados.forEach(element => {
+
+     // console.log(element);
+
+      const tieneElementoComun = iPersona.some(obj1 => element.some(obj2 => obj2.interes === obj1.interes));
+
+   //   console.log(tieneElementoComun);
+
+
+      if(tieneElementoComun) {
+
+       
+        const nuevoRegistro = {...eventos[contador], ...{intereses: element}};
+        
+        eventosFiltrados.push(nuevoRegistro);
+
+        contador++;
+ 
+
+
+      } else {
+
+
+        contador++;
+        
+
+      }
+
+    
+  
+
+  });
+
+
+  return eventosFiltrados;
+
+
+}
+
+
 const obtenerEventosC = async (req, res) => {
 
   try {
     const query = 'select e.* from evento e inner join lugar l on e.lugar = l.codigo_lugar inner join persona p on l.ciudad = p.ciudad where p.id = $1 order by e.fecha';
-    const values = [req.id_usuario];
-    const eventos = await pool.query(query, values);
+    const persona = [req.id_usuario];
+    const eventos = await pool.query(query, persona);
+
+   // console.log(persona);
+    
 
     if (!eventos) {
       res.status(404).json({ error: 'eventos en la misma ciudad no encontrados' });
     }
 
+    
+    const eventosId = obtenerSoloEventosId(eventos.rows);
+//    console.log(eventosId);
+
+    const interesesEventos = await obtenerInteresesEventos(eventosId);
+  //  console.log(interesesEventos);
+
+    
+    const interesesPersona = await obtenerInteresesPersona(persona);
+ //   console.log(interesesPersona);
+
+    const eventosFiltrados = compararIntereses(eventos.rows, interesesEventos, interesesPersona);
+
+    eventos.rows = eventosFiltrados;
+
+
+    eventos.rowCount= eventosFiltrados.length;
+
+
     res.status(200).json(eventos);
+
 
   } catch (error) {
     console.log(error);
