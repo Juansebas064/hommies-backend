@@ -92,7 +92,7 @@ const obtenerInteresesEventos = async (eventosId) =>{
   const interesesEventos1 = await eventosId.map(async function(elemento) {
 
     try {
-      console.log(elemento)
+     // console.log(elemento)
      // const query = 'select i.* from interes AS i inner join interes_evento AS ie on i.codigo_interes = ie.interes where ie.evento  = $1;';
       const intereses = await pool.query(`select i.* from interes AS i inner join interes_evento AS ie on i.codigo_interes = ie.interes where ie.evento  = '${elemento}';`);
   
@@ -100,7 +100,7 @@ const obtenerInteresesEventos = async (eventosId) =>{
         return "el evento no tiene intereses, como raro a estas alturas";
       }
 
-    //  console.log(intereses)
+      //console.log(intereses)
       return intereses.rows;
     } catch (error) {
       console.log(error);
@@ -133,12 +133,12 @@ const obtenerInteresesPersona = async (personaId) => {
   
 
 
-
-
 }
 
 //funcion la cual normalizara el json para que pueda ser compatible con 
 const normalizarJson =(iEvento) => {
+
+ // console.log(iEvento);
 
   const jsonNormalizado = iEvento.map(function(elemento) {
 
@@ -146,7 +146,7 @@ const normalizarJson =(iEvento) => {
 
     const yanose = elemento1.map(function(elemento2) {
 
-      return {'interes':elemento2.codigo_interes};
+      return {'interes':elemento2.codigo_interes, 'nombre': elemento2.nombre};
 
     });
     return yanose;
@@ -157,6 +157,7 @@ const normalizarJson =(iEvento) => {
   return jsonNormalizado;
 
 }
+
 
 const compararIntereses = (eventos, iEvento, iPersona ) => {
 
@@ -198,6 +199,36 @@ const compararIntereses = (eventos, iEvento, iPersona ) => {
       }
 
     
+  
+
+  });
+
+
+  return eventosFiltrados;
+
+
+}
+
+const obtenerAllEI = (eventos, iEvento) => {
+
+  
+
+  const interesesEventoNormalizados = normalizarJson(iEvento);
+ 
+  const eventosFiltrados = []; //array definitivo
+  let contador=0;
+
+ 
+
+  interesesEventoNormalizados.forEach(element => {
+    
+       
+        const nuevoRegistro = {...eventos[contador], ...{intereses: element}};
+        
+        eventosFiltrados.push(nuevoRegistro);
+
+        contador++;
+
   
 
   });
@@ -411,6 +442,34 @@ const obtenerListaEventosLugar = async (req, res) => {
 }
 
 
+
+const EventosParaNavBar = async (req, res) => {
+
+  try {
+    const listaEventos = await pool.query('SELECT * FROM  evento');
+
+    const eventosId = obtenerSoloEventosId(listaEventos.rows);
+
+    const interesesEvento = await obtenerInteresesEventos(eventosId);
+    
+
+    const eventosConIntereses = obtenerAllEI (listaEventos.rows, interesesEvento);
+
+    listaEventos.rowCount = eventosConIntereses.length;
+    listaEventos.rows = eventosConIntereses;
+
+
+    res.status(200).json(listaEventos); 
+
+
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({ error: 'Error al obtener la lista de eventos' })
+  }
+
+}
+
+
 module.exports = {
   agregarEvento: agregarEvento,
   editarEvento: editarEvento,
@@ -419,5 +478,6 @@ module.exports = {
   anularInscipcionEvento: anularInscipcionEvento,
   inscripcionEvento: inscripcionEvento,
   obtenerListaParticipantes: obtenerListaParticipantes,
-  obtenerListaEventosLugar: obtenerListaEventosLugar
+  obtenerListaEventosLugar: obtenerListaEventosLugar,
+  EventosParaNavBar,EventosParaNavBar
 };

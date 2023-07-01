@@ -1,5 +1,5 @@
 const express = require('express');
-const { agregarEvento, editarEvento, obtenerEventosC, anularInscipcionEvento, eliminarEvento, inscripcionEvento, obtenerListaParticipantes, obtenerListaEventosLugar } = require('../controllers/controladorEvento.js');
+const {EventosParaNavBar, agregarEvento, editarEvento, obtenerEventosC, anularInscipcionEvento, eliminarEvento, inscripcionEvento, obtenerListaParticipantes, obtenerListaEventosLugar } = require('../controllers/controladorEvento.js');
 const verificarAutenticacion = require('../middleware/verificarAutenticacion.js');
 
 const routerAgregarEvento = express.Router();
@@ -11,6 +11,7 @@ const routerAnularInscripcionEvento = express.Router();
 const routerInscripcionEvento = express.Router();
 const routerObtenerParticipantes = express.Router();
 const routerObtenerListaEventos = express.Router();
+const routerEventosParaNavBar = express.Router();
 
 
 routerEditarEvento.put('/evento/editar/:codigo_evento', verificarAutenticacion, editarEvento);
@@ -21,7 +22,7 @@ routerAnularInscripcionEvento.post('/evento/anular-inscripcion', verificarAutent
 routerInscripcionEvento.post('/evento/inscribirse', verificarAutenticacion, inscripcionEvento);
 routerObtenerParticipantes.post('/evento/participantes', verificarAutenticacion, obtenerListaParticipantes);
 routerObtenerListaEventos.post('/evento/evento-lugar/lista', verificarAutenticacion, obtenerListaEventosLugar);
-
+routerEventosParaNavBar.get('/navbar/get/lista', verificarAutenticacion, EventosParaNavBar);
 
 
 module.exports = {
@@ -33,5 +34,6 @@ module.exports = {
   routerInscripcionEvento: routerInscripcionEvento,
   routerObtenerParticipantes: routerObtenerParticipantes,
   routerObtenerListaEventos: routerObtenerListaEventos,
+  routerEventosParaNavBar: routerEventosParaNavBar
 };
 

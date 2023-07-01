@@ -9,7 +9,7 @@ const cors = require("cors");
 const { join, dirname } = require('path');
 //const url = require('meta');
 
-const { routerAgregarEvento, routerEditarEvento, routerObtenerEventosC, routerAnularInscripcionEvento, routerEliminar, routerInscripcionEvento, routerObtenerParticipantes, routerObtenerListaEventos } = require('./routes/rutasEvento');
+const { routerAgregarEvento, routerEditarEvento, routerObtenerEventosC, routerAnularInscripcionEvento, routerEliminar, routerInscripcionEvento, routerObtenerParticipantes, routerObtenerListaEventos, routerEventosParaNavBar } = require('./routes/rutasEvento');
 const userDataRouter = require('./routes/userDataRouter');
 const verifyGoogleLogin = require('./routes/rutasModuloLogin');
 const jwtCreate = require('./routes/sessionRoute');
@@ -130,6 +130,11 @@ console.log(current);
 
 app.use('/api/img', express.static(join(current, 'api/img')));
 //fin pruebas para mandar fotos al front
+
+
+
+//use para tener todos los eventos de la navBar
+app.use ('/api', routerEventosParaNavBar);
 
 
 
