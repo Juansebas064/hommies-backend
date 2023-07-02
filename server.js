@@ -16,7 +16,7 @@ const jwtCreate = require('./routes/sessionRoute');
 const verifyGoogleRegister = require('./routes/rutasModuloRegistroGoogle');
 const normalRegister = require('./routes/turaModuloRegistroNormal');
 const routerModificarPerfil = require('./routes/rutasModificarPerfil');
-const { routerGetPlace, routerAgregarLugar, routerEliminarLugar } = require('./routes/rutasLugar');
+const { routerGetPlace, routerAgregarLugar, routerEliminarLugar, routerListarLugares } = require('./routes/rutasLugar');
 const { routerModificarInteres, routerGetIntereses, routerInteresesUsuario, routerInteresesEvento, routerGetInteresesEvento } = require('./routes/rutasIntereses');
 const routerRecoverPass = require('./routes/recoverPassword');
 const { routerGetCiudad } = require('./routes/rutasCiudad');
@@ -88,29 +88,24 @@ app.use('/api', routerModificarPerfil);
 
 app.use('/api', routerGetPlace);
 
+app.use('/api',routerListarLugares);
 
 //use para modificar y registrar los intereses de la persona
-
 app.use('/api', routerModificarInteres);
 
 //use para obtener todos los intereses de la base de datos
-
 app.use('/api', routerGetIntereses);
 
 //use para obtener todos los intereses del usuario
-
 app.use('/api', routerInteresesUsuario);
 
 //use para registrar los intereses de un evento
-
 app.use('/api', routerInteresesEvento);
 
 // use para obtener todos los intereses de un evento
-
 app.use('/api', routerGetInteresesEvento)
 
 //use para obtener todos los eventos de un lugar
-
 app.use('/api', routerObtenerListaEventos);
 
 //use para recuperar contraseña
