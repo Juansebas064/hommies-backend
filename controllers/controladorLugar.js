@@ -69,7 +69,7 @@ const eliminarLugar = async (req, res) => {
     lugarActual.estado = 'inactivo';
     const rutaImgLugar = lugarActual.foto ? `./${lugarActual.foto}` : null;
 
-    if(rutaImgLugar && fs.existsSync(rutaImgLugar)){
+    if (rutaImgLugar && fs.existsSync(rutaImgLugar)) {
       fs.unlinkSync(rutaImgLugar);
       lugarActual.foto = null;
     }
@@ -84,8 +84,38 @@ const eliminarLugar = async (req, res) => {
   }
 };
 
+const listarLugares = async (req, res) => {
+
+  try {
+    const lugares = await pool.query('SELECT l.* FROM lugar l');
+    const ciudades = await pool.query('SELECT c.* FROM ciudad');
+
+    const ciudadMap = new Map();
+
+    ciudades.rows.forEach((ciudad) => {
+      ciudadMap.set(ciudad.codigo_ciudad, ciudad);
+    });
+
+    lugares.rows.forEach((lugar) => {
+      const ciudad = ciudadMap.get(lugar.ciudad);
+
+      if (ciudad) {
+        lugar.ciudad = ciudad;
+      }
+    });
+
+    res.status(200).json(lugares);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({error: "Ocurrio un error en el servidor"});
+  }
+
+}
+
 module.exports = {
   getLugares: getLugares,
   agregarLugar: agregarLugar,
-  eliminarLugar: eliminarLugar
+  eliminarLugar: eliminarLugar,
+  listarLugares: listarLugares
 };
