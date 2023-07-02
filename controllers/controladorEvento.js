@@ -161,8 +161,6 @@ const normalizarJson =(iEvento) => {
 
 const compararIntereses = (eventos, iEvento, iPersona ) => {
 
-  
-
   const interesesEventoNormalizados = normalizarJson(iEvento);
 
   let contador = 0;
@@ -188,55 +186,32 @@ const compararIntereses = (eventos, iEvento, iPersona ) => {
 
         contador++;
  
-
-
       } else {
 
-
         contador++;
-        
-
       }
-
-    
-  
 
   });
 
-
   return eventosFiltrados;
-
-
 }
 
 const obtenerAllEI = (eventos, iEvento) => {
-
-  
 
   const interesesEventoNormalizados = normalizarJson(iEvento);
  
   const eventosFiltrados = []; //array definitivo
   let contador=0;
 
- 
-
   interesesEventoNormalizados.forEach(element => {
     
-       
         const nuevoRegistro = {...eventos[contador], ...{intereses: element}};
         
         eventosFiltrados.push(nuevoRegistro);
 
         contador++;
-
-  
-
   });
-
-
   return eventosFiltrados;
-
-
 }
 
 
