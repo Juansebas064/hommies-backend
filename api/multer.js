@@ -1,6 +1,3 @@
-
-
-
 const multer = require('multer')
 
 const storage = multer.diskStorage({
@@ -12,6 +9,19 @@ const storage = multer.diskStorage({
     },
 });
 
-const upload = multer({storage: storage})
+const storageAvatars = multer.diskStorage({
+    destination: function (req, file, cb){
+        cb(null, 'api/img/avatars');
+    }, 
+    filename: function (req, file, cb){
+        cb(null, Date.now() + "-" + file.originalname);
+    },
+});
 
-module.exports = upload;
+const upload = multer({storage: storage})
+const uploadAvatars = multer({storage: storageAvatars})
+
+module.exports = {
+    upload: upload,
+    uploadAvatars: uploadAvatars
+}

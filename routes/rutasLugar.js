@@ -7,7 +7,7 @@ const routerListarLugares = express.Router();
 const { getLugares, agregarLugar, eliminarLugar, listarLugares} = require('../controllers/controladorLugar.js');
 const verificarAutenticacion = require('../middleware/verificarAutenticacion.js');
 
-const upload = require('../api/multer.js')
+const {upload} = require('../api/multer.js')
 
 const optionalUpload = (req, res, next) => {
     if (!req.file) {
