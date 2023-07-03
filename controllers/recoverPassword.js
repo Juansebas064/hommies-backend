@@ -7,7 +7,7 @@ function generarTokenRecuperacion() {
   const longitudCodigo = 6;
   let tokenRecuperacion = '';
 
-  for (let i=0; i < longitudCodigo; i++){
+  for (let i = 0; i < longitudCodigo; i++) {
     tokenRecuperacion += Math.floor(Math.random() * 10)
   }
 
@@ -23,7 +23,7 @@ const recuperarPass = async (req, res) => {
     if (existeCorreo) {
 
       const codigoVerificacion = generarTokenRecuperacion(email)
-        
+
       const mailOptions = {
         from: '"Contraseña olvidada" <hommiesapp@gmail.com>',
         to: email,
@@ -51,19 +51,19 @@ const recuperarPass = async (req, res) => {
 
 
       try {
-        
+
         const query = "UPDATE public.persona SET token_recuperacion= $1 WHERE correo_electronico= $2;"
         const values = [codigoVerificacion, email]
 
         await pool.query(query, values);
-        return res.status(200).json({message: "Token guardado correctamente"})
+        return res.status(200).json({ message: "Token guardado correctamente" })
       } catch (error) {
         console.log(error)
-        return res.status(404).json({error: "No se pudo guardar el token"})
+        return res.status(404).json({ error: "No se pudo guardar el token" })
       }
 
     } else {
-        res.status(404).json({message: "Correo electrónico no encontrado"})
+      res.status(404).json({ message: "Correo electrónico no encontrado" })
     }
   } catch (error) {
     res.status(400).json({ error: "Error al verificar el correo electrónico" });
@@ -82,7 +82,7 @@ const recuperarPassToken = async (req, res) => {
 
     if (result.rowCount === 1) {
       // El token y el correo son correctos, redirige al usuario a otra pestaña
-      return res.status(200).json({mensaje: 'Token valido.'})
+      return res.status(200).json({ mensaje: 'Token valido.' })
     } else {
       // El token y el correo no coinciden, muestra un mensaje de error
       return res.status(400).json({ mensaje: 'Token de recuperación inválido' });
@@ -94,19 +94,20 @@ const recuperarPassToken = async (req, res) => {
 }
 
 const cambiarPass = async (req, res) => {
-  const {correo_electronico, contraseña} = req.body;
+  const { correo_electronico, contraseña } = req.body;
 
-  try{
+  try {
 
-    const contraseñaEncriptada = encriptarPass(contraseña)
+    const contraseñaEncriptada = await encriptarPass(contraseña)
+    console.log(contraseñaEncriptada)
 
-    const query = 'update public.persona set contraseña = $1 where email = $2'
-    const values = [contraseñaEncriptada,correo_electronico]
+    const query = 'update public.persona set contraseña = $1 where correo_electronico = $2'
+    const values = [contraseñaEncriptada, correo_electronico]
     const result = await pool.query(query, values);
 
     if (result.rowCount === 1) {
       // El token y el correo son correctos, redirige al usuario a otra pestaña
-      return res.status(200).json({mensaje: 'Contraseña actualizada correctamente.'})
+      return res.status(200).json({ mensaje: 'Contraseña actualizada correctamente.' })
     } else {
       // El token y el correo no coinciden, muestra un mensaje de error
       return res.status(400).json({ mensaje: 'Contraseña no valida' });
@@ -114,7 +115,7 @@ const cambiarPass = async (req, res) => {
   } catch (error) {
     console.error('Error al recuperar la contraseña:', error);
     return res.status(500).json({ mensaje: 'Error al actualizar la contraseña. ' });
-    }
+  }
 }
 
 
