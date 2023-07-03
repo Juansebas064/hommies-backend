@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const persona = require('../models/persona.js');
-const { json } = require('express/lib/response.js');
 
 const verificarAutenticacion = async (req, res, next) => {
   const token = req.headers.authorization;

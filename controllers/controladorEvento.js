@@ -17,8 +17,6 @@ const agregarEvento = async (req, res, next) => {
     console.log('Propietario del evento:', id)
     datosNuevoEvento.creador = id
 
-    console.log('Datos para nuevo evento:', datosNuevoEvento)
-
     await evento.create({
       codigo_evento: datosNuevoEvento.codigo_evento,
       nombre: datosNuevoEvento.nombre,
@@ -28,13 +26,11 @@ const agregarEvento = async (req, res, next) => {
       hora_final: datosNuevoEvento.hora_final,
       lugar: datosNuevoEvento.lugar,
       creador: req.id_usuario
-    })
+    });
 
-    //res.status(200).json({ mensaje: 'Evento agregado exitosamente', idEvento: codigo_evento });
+    req.body.codigo_evento = datosNuevoEvento.codigo_evento;
 
-    req.body.codigo_evento = datosNuevoEvento.codigo_evento
-
-    next()
+    next();
 
   } catch (error) {
     console.error('Error al agregar el evento:', error);
@@ -68,148 +64,118 @@ const editarEvento = async (req, res) => {
 };
 
 
-
 //Metodos de logica para el filtrado de lugares por interes de persona
 //NOTA: COMO NO SE PUEDE UTILIZAR UN CONTROLARO EN oTRO, SE DEBERA DE CREAR METODOS APARTE
-
 const obtenerSoloEventosId = (eventos) => {
 
-  const eventosId = eventos.map(function(elemento) {
-
+  const eventosId = eventos.map(function (elemento) {
     return elemento.codigo_evento;
-  } );
+  });
 
   return eventosId;
-
 }
 
 
+const obtenerInteresesEventos = async (eventosId) => {
 
-
-const obtenerInteresesEventos = async (eventosId) =>{
-
-
-  const interesesEventos1 = await eventosId.map(async function(elemento) {
+  const interesesEventos1 = await eventosId.map(async function (elemento) {
 
     try {
-     // console.log(elemento)
-     // const query = 'select i.* from interes AS i inner join interes_evento AS ie on i.codigo_interes = ie.interes where ie.evento  = $1;';
+
       const intereses = await pool.query(`select i.* from interes AS i inner join interes_evento AS ie on i.codigo_interes = ie.interes where ie.evento  = '${elemento}';`);
-  
+
       if (!intereses.rowCount) {
         return "el evento no tiene intereses, como raro a estas alturas";
       }
 
-      //console.log(intereses)
       return intereses.rows;
+
     } catch (error) {
       console.log(error);
       console.log("error en la consulta de intereses eventos");
     }
-
-
   });
 
   const interesesEventos = Promise.all(interesesEventos1);
   return interesesEventos;
-
 }
 
-const obtenerInteresesPersona = async (personaId) => {
 
+const obtenerInteresesPersona = async (personaId) => {
 
   try {
 
     const respuesta = await pool.query(`SELECT interes FROM interes_persona WHERE (persona = '${personaId}')`);
-     // console.log(respuesta);
 
     return respuesta.rows;
 
-
   } catch (error) {
-
     console.log(error);
   }
-  
-
-
 }
 
+
 //funcion la cual normalizara el json para que pueda ser compatible con 
-const normalizarJson =(iEvento) => {
+const normalizarJson = (iEvento) => {
 
- // console.log(iEvento);
-
-  const jsonNormalizado = iEvento.map(function(elemento) {
+  const jsonNormalizado = iEvento.map(function (elemento) {
 
     const elemento1 = Object.values(elemento);
 
-    const yanose = elemento1.map(function(elemento2) {
+    const yanose = elemento1.map(function (elemento2) {
 
-      return {'interes':elemento2.codigo_interes, 'nombre': elemento2.nombre};
+      return { 'interes': elemento2.codigo_interes, 'nombre': elemento2.nombre };
 
     });
     return yanose;
-
-
   });
 
   return jsonNormalizado;
-
 }
 
 
-const compararIntereses = (eventos, iEvento, iPersona ) => {
+const compararIntereses = (eventos, iEvento, iPersona) => {
 
   const interesesEventoNormalizados = normalizarJson(iEvento);
 
   let contador = 0;
   const eventosFiltrados = []; //array definitivo
 
-  //console.log(interesesEventoNormalizados);
-
   interesesEventoNormalizados.forEach(element => {
 
-     // console.log(element);
+    const tieneElementoComun = iPersona.some(obj1 => element.some(obj2 => obj2.interes === obj1.interes));
 
-      const tieneElementoComun = iPersona.some(obj1 => element.some(obj2 => obj2.interes === obj1.interes));
+    if (tieneElementoComun) {
 
-   //   console.log(tieneElementoComun);
+      const nuevoRegistro = { ...eventos[contador], ...{ intereses: element } };
 
+      eventosFiltrados.push(nuevoRegistro);
 
-      if(tieneElementoComun) {
+      contador++;
 
-       
-        const nuevoRegistro = {...eventos[contador], ...{intereses: element}};
-        
-        eventosFiltrados.push(nuevoRegistro);
-
-        contador++;
- 
-      } else {
-
-        contador++;
-      }
-
+    } else {
+      contador++;
+    }
   });
 
   return eventosFiltrados;
 }
 
+
 const obtenerAllEI = (eventos, iEvento) => {
 
   const interesesEventoNormalizados = normalizarJson(iEvento);
- 
+
   const eventosFiltrados = []; //array definitivo
-  let contador=0;
+  let contador = 0;
 
   interesesEventoNormalizados.forEach(element => {
-    
-        const nuevoRegistro = {...eventos[contador], ...{intereses: element}};
-        
-        eventosFiltrados.push(nuevoRegistro);
 
-        contador++;
+    const nuevoRegistro = { ...eventos[contador], ...{ intereses: element } };
+
+    eventosFiltrados.push(nuevoRegistro);
+
+    contador++;
   });
   return eventosFiltrados;
 }
@@ -222,34 +188,20 @@ const obtenerEventosC = async (req, res) => {
     const persona = [req.id_usuario];
     const eventos = await pool.query(query, persona);
 
-   // console.log(persona);
-    
-
     if (!eventos) {
       res.status(404).json({ error: 'eventos en la misma ciudad no encontrados' });
     }
 
-    
     const eventosId = obtenerSoloEventosId(eventos.rows);
-//    console.log(eventosId);
-
     const interesesEventos = await obtenerInteresesEventos(eventosId);
-  //  console.log(interesesEventos);
-
-    
     const interesesPersona = await obtenerInteresesPersona(persona);
- //   console.log(interesesPersona);
-
     const eventosFiltrados = compararIntereses(eventos.rows, interesesEventos, interesesPersona);
 
     eventos.rows = eventosFiltrados;
 
-
-    eventos.rowCount= eventosFiltrados.length;
-
+    eventos.rowCount = eventosFiltrados.length;
 
     res.status(200).json(eventos);
-
 
   } catch (error) {
     console.log(error);
@@ -258,26 +210,16 @@ const obtenerEventosC = async (req, res) => {
 };
 
 
-
 //ELIMINAR EVENTO
-
-
 const eliminarDeParticipa = async (idEvento) => {
-
 
   try {
 
     const respuesta = await pool.query(`DELETE FROM evento_participa WHERE (evento = '${idEvento}')`);
 
-    console.log(respuesta);
-
-
   } catch (error) {
-
     console.log(error);
   }
-
-
 }
 
 const eliminarDeintereses = async (idEvento) => {
@@ -286,24 +228,15 @@ const eliminarDeintereses = async (idEvento) => {
 
     const respuesta = await pool.query(`DELETE FROM interes_evento WHERE (evento = '${idEvento}')`);
 
-    console.log(respuesta);
-
   } catch (error) {
-
     console.log(error);
   }
-
-
 }
-
 
 
 const eliminarEvento = async (req, res) => {
 
-
   const atributosActualizados = req.body;
-
-  // console.log(atributosActualizados);
 
   try {
     const eventoExistente = await evento.findByPk(req.body.codigo_evento);
@@ -317,10 +250,8 @@ const eliminarEvento = async (req, res) => {
     await eliminarDeintereses(req.body.codigo_evento);
     await eventoExistente.destroy();
 
-
-
-
     return res.status(200).json({ message: 'Evento eliminado exitosamente' });
+
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Error al eliminar el evento' });
@@ -328,8 +259,8 @@ const eliminarEvento = async (req, res) => {
 };
 
 
-
 const anularInscipcionEvento = async (req, res) => {
+
   try {
 
     const eventoAnular = await evento.findByPk(req.body.codigo_evento);
@@ -354,7 +285,6 @@ const anularInscipcionEvento = async (req, res) => {
 
 const inscripcionEvento = async (req, res) => {
 
-
   try {
     const evento = req.body.codigo_evento;
     const persona = req.id_usuario
@@ -367,12 +297,10 @@ const inscripcionEvento = async (req, res) => {
 
     res.status(200).json({ message: 'Persona inscrita correctamente', idEvento: evento })
 
-
   } catch (error) {
     console.log(error)
     res.status(400).json({ error: 'Error al inscribirse al evento' })
   }
-
 }
 
 
@@ -387,7 +315,6 @@ const obtenerListaParticipantes = async (req, res) => {
     let participantesOrganizar = JSON.parse(JSON.stringify(participantes));
 
     const creador = participantesOrganizar.rows.filter(e => e.id === eventoActual.creador);
-
     const participantesSinCreador = participantesOrganizar.rows.filter(e => e.id !== eventoActual.creador);
 
     participantesOrganizar.rows = creador.concat(participantesSinCreador);
@@ -402,6 +329,7 @@ const obtenerListaParticipantes = async (req, res) => {
 
 
 const obtenerListaEventosLugar = async (req, res) => {
+
   try {
 
     const codigo_lugar = req.body.codigo_lugar
@@ -417,31 +345,25 @@ const obtenerListaEventosLugar = async (req, res) => {
 }
 
 
-
 const EventosParaNavBar = async (req, res) => {
 
   try {
+
     const listaEventos = await pool.query('SELECT * FROM  evento');
-
     const eventosId = obtenerSoloEventosId(listaEventos.rows);
-
     const interesesEvento = await obtenerInteresesEventos(eventosId);
-    
 
-    const eventosConIntereses = obtenerAllEI (listaEventos.rows, interesesEvento);
+    const eventosConIntereses = obtenerAllEI(listaEventos.rows, interesesEvento);
 
     listaEventos.rowCount = eventosConIntereses.length;
     listaEventos.rows = eventosConIntereses;
 
-
-    res.status(200).json(listaEventos); 
-
+    res.status(200).json(listaEventos);
 
   } catch (error) {
     console.log(error)
     res.status(400).json({ error: 'Error al obtener la lista de eventos' })
   }
-
 }
 
 
@@ -454,5 +376,5 @@ module.exports = {
   inscripcionEvento: inscripcionEvento,
   obtenerListaParticipantes: obtenerListaParticipantes,
   obtenerListaEventosLugar: obtenerListaEventosLugar,
-  EventosParaNavBar,EventosParaNavBar
+  EventosParaNavBar, EventosParaNavBar
 };

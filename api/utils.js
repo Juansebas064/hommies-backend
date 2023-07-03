@@ -1,4 +1,4 @@
-const apiMessage = "Desgraciado jordi";
+const apiMessage = "Mensaje de prueba";
 
 const uuidLugar = () => {
     const fechaActual = new Date();
@@ -15,8 +15,6 @@ const uuidLugar = () => {
   
     return identificador;
   }
-
-
 
 
 module.exports = {
