@@ -1,5 +1,5 @@
 const express = require("express");
-const { pool, verificarCorreoExistente } = require("../api/db.js");
+const { pool, verificarCorreoExistente, encriptarPass } = require("../api/db.js");
 const transporter = require("../api/nodemailer.js");
 
 function generarTokenRecuperacion() {
@@ -93,8 +93,33 @@ const recuperarPassToken = async (req, res) => {
   }
 }
 
+const cambiarPass = async (req, res) => {
+  const {correo_electronico, contraseña} = req.body;
+
+  try{
+
+    const contraseñaEncriptada = encriptarPass(contraseña)
+
+    const query = 'update public.persona set contraseña = $1 where email = $2'
+    const values = [contraseñaEncriptada,correo_electronico]
+    const result = await pool.query(query, values);
+
+    if (result.rowCount === 1) {
+      // El token y el correo son correctos, redirige al usuario a otra pestaña
+      return res.status(200).json({mensaje: 'Contraseña actualizada correctamente.'})
+    } else {
+      // El token y el correo no coinciden, muestra un mensaje de error
+      return res.status(400).json({ mensaje: 'Contraseña no valida' });
+    }
+  } catch (error) {
+    console.error('Error al recuperar la contraseña:', error);
+    return res.status(500).json({ mensaje: 'Error al actualizar la contraseña. ' });
+    }
+}
+
 
 module.exports = {
   recuperarPass: recuperarPass,
   recuperarPassToken: recuperarPassToken,
+  cambiarPass: cambiarPass,
 }

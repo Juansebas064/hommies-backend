@@ -178,5 +178,6 @@ module.exports = {
   sequelize: sequelize,
   generarIdentificadorUnico: generarIdentificadorUnico,
   uuidEventoParticipa: uuidEventoParticipa,
-  verificarCorreoExistente: verificarCorreoExistente
+  verificarCorreoExistente: verificarCorreoExistente,
+  encriptarPass: encriptarPass
 }
