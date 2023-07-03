@@ -3,8 +3,10 @@ const { pool, verificarCorreoExistente } = require("../api/db.js");
 const transporter = require("../api/nodemailer.js");
 
 function generarTokenRecuperacion() {
+
   const longitudCodigo = 6;
   let tokenRecuperacion = '';
+
   for (let i=0; i < longitudCodigo; i++){
     tokenRecuperacion += Math.floor(Math.random() * 10)
   }
@@ -60,8 +62,6 @@ const recuperarPass = async (req, res) => {
         return res.status(404).json({error: "No se pudo guardar el token"})
       }
 
-
-
     } else {
         res.status(404).json({message: "Correo electrónico no encontrado"})
     }
@@ -69,5 +69,6 @@ const recuperarPass = async (req, res) => {
     res.status(400).json({ error: "Error al verificar el correo electrónico" });
   }
 };
+
 
 module.exports = recuperarPass;

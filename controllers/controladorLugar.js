@@ -22,6 +22,7 @@ const getLugares = async (req, res) => {
   }
 };
 
+
 const agregarLugar = async (req, res) => {
 
   try {
@@ -30,8 +31,6 @@ const agregarLugar = async (req, res) => {
     const codigo_lugar = uuidLugar();
     datosNuevoLugar.foto = foto;
     datosNuevoLugar.codigo_lugar = codigo_lugar;
-
-
 
     await lugar.create({
       codigo_lugar: datosNuevoLugar.codigo_lugar,
@@ -47,6 +46,7 @@ const agregarLugar = async (req, res) => {
     })
 
     res.status(200).json({ message: 'Lugar insertado correctamente' });
+
   } catch (error) {
     console.error('Error al insertar lugar:', error);
     res.status(500).json({ error: 'Ocurrió un error al insertar el lugar' });
@@ -82,7 +82,7 @@ const eliminarLugar = async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Error en el servidor" });
   }
-};
+}
 
 const listarLugares = async (req, res) => {
 
@@ -112,6 +112,7 @@ const listarLugares = async (req, res) => {
   }
 
 }
+
 
 module.exports = {
   getLugares: getLugares,

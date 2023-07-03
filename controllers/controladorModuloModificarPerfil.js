@@ -32,12 +32,12 @@ const modificarPerfil = async (req, res) => {
     await personaExiste.save();
 
     return res.status(200).json({ message: 'Datos de perfil actualizados exitosamente' });
+
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Error al actualizar el perfil' });
   }
 };
-
 
 
 module.exports = modificarPerfil;

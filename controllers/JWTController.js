@@ -1,16 +1,12 @@
 const bycript = require("bcrypt");
 const jwt = require('jsonwebtoken');
-
 const { validarSesion } = require('../api/db.js');
+
 
 const jwtGenerator = async (req, res) => {
 
-
   const user = await validarSesion(req);
 
-  console.log("estas en jwtgenerator   ");
-
-  console.log(user);
   if (user.ingresoCorrecto != true) {
 
     res.send({
@@ -24,9 +20,7 @@ const jwtGenerator = async (req, res) => {
     res.send({
       token: token
     });
-    console.log(user);
   }
-
 };
 
 

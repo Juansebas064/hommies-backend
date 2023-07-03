@@ -1,10 +1,6 @@
 const { OAuth2Client } = require('google-auth-library');
-
-
 const idcliente = '650698705793-eetbgpi48lld1tb4eol6n8g355raapeg.apps.googleusercontent.com';
-
 const clientID = new OAuth2Client(idcliente);
-
 
 //funcion pra decodificar el token, funcion de prueba ya que no verifica que sea un token valido
 function decodeJwt(token) {
@@ -17,8 +13,6 @@ function decodeJwt(token) {
     return { header, payload };
   }
 
-
-
 //funcion de verificar el token, esta devuelve el token decodificado y verificado 
 async function verifyGoogleCredential(token) {
   try {
@@ -28,12 +22,9 @@ async function verifyGoogleCredential(token) {
     });
 
     const payload = ticket.getPayload();
-
-    console.log(payload);
     const userId = payload.sub;
 
     // Puedes realizar validaciones adicionales o guardar la información del usuario en la base de datos
-
     return {
       id: userId,
       email: payload.email,

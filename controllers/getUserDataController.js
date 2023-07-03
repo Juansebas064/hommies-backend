@@ -1,8 +1,8 @@
 const persona = require('../models/persona.js');
 
 const getUserData = async (req, res) => {
+
   const { id } = req.body;
-  console.log(id);
 
   try {
 
@@ -16,10 +16,10 @@ const getUserData = async (req, res) => {
     res.status(200).json(userData);
 
   } catch (error) {
-
     console.error('Error al realizar el inicio de sesión:', error);
     res.status(500).json({ error: 'Error del servidor' });
   }
 };
+
 
 module.exports = getUserData;
