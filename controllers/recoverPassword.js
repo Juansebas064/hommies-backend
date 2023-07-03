@@ -70,5 +70,31 @@ const recuperarPass = async (req, res) => {
   }
 };
 
+const recuperarPassToken = async (req, res) => {
+  const { token_recuperacion, correo_electronico } = req.body;
 
-module.exports = recuperarPass;
+  try {
+    // Consulta la base de datos para verificar el token y el correo
+    const query = 'SELECT correo_electronico FROM public.persona WHERE token_recuperacion = $1 AND correo_electronico = $2';
+    const values = [token_recuperacion, correo_electronico];
+    console.log(values)
+    const result = await pool.query(query, values);
+
+    if (result.rowCount === 1) {
+      // El token y el correo son correctos, redirige al usuario a otra pestaña
+      return res.status(200).json({mensaje: 'Token valido.'})
+    } else {
+      // El token y el correo no coinciden, muestra un mensaje de error
+      return res.status(400).json({ mensaje: 'Token de recuperación inválido' });
+    }
+  } catch (error) {
+    console.error('Error al recuperar la contraseña:', error);
+    return res.status(500).json({ mensaje: 'Error al recuperar la contraseña' });
+  }
+}
+
+
+module.exports = {
+  recuperarPass: recuperarPass,
+  recuperarPassToken: recuperarPassToken,
+}

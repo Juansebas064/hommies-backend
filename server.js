@@ -18,7 +18,7 @@ const normalRegister = require('./routes/turaModuloRegistroNormal');
 const routerModificarPerfil = require('./routes/rutasModificarPerfil');
 const { routerGetPlace, routerAgregarLugar, routerEliminarLugar, routerListarLugares } = require('./routes/rutasLugar');
 const { routerModificarInteres, routerGetIntereses, routerInteresesUsuario, routerInteresesEvento, routerGetInteresesEvento } = require('./routes/rutasIntereses');
-const routerRecoverPass = require('./routes/recoverPassword');
+const {routerRecoverPass, routerRecoverPassToken} = require('./routes/recoverPassword');
 const { routerGetCiudad } = require('./routes/rutasCiudad');
 
 
@@ -111,8 +111,11 @@ app.use('/api', routerObtenerListaEventos);
 //use para recuperar contraseña
 app.use('/api', routerRecoverPass);
 
+//use para recuperar contraseña token
+app.use('/api', routerRecoverPassToken);
+
 //use para obtener ciudad del usuario
-app.use('/api', routerGetCiudad)
+app.use('/api', routerGetCiudad);
 
 
 
