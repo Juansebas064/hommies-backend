@@ -88,7 +88,7 @@ const listarLugares = async (req, res) => {
 
   try {
     const lugares = await pool.query('SELECT l.* FROM lugar l');
-    const ciudades = await pool.query('SELECT c.* FROM ciudad');
+    const ciudades = await pool.query('SELECT c.* FROM ciudad c');
 
     const ciudadMap = new Map();
 
@@ -108,7 +108,7 @@ const listarLugares = async (req, res) => {
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({error: "Ocurrio un error en el servidor"});
+    res.status(500).json({ error: "Ocurrio un error en el servidor" });
   }
 
 }
