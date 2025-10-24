@@ -1,7 +1,7 @@
-const { pool } = require("../api/db.js");
-const { uuidLugar } = require("../api/utils.js");
-const fs = require('fs');
-const lugar = require("../models/lugar.js");
+import { pool } from "../config/db.js";
+import { uuidLugar } from "../api/utils.js";
+import { existsSync, unlinkSync } from 'fs';
+import lugar from "../models/lugar.js";
 
 
 const getLugares = async (req, res) => {
@@ -69,8 +69,8 @@ const eliminarLugar = async (req, res) => {
     lugarActual.estado = 'inactivo';
     const rutaImgLugar = lugarActual.foto ? `./${lugarActual.foto}` : null;
 
-    if (rutaImgLugar && fs.existsSync(rutaImgLugar)) {
-      fs.unlinkSync(rutaImgLugar);
+    if (rutaImgLugar && existsSync(rutaImgLugar)) {
+      unlinkSync(rutaImgLugar);
       lugarActual.foto = null;
     }
 
@@ -113,10 +113,9 @@ const listarLugares = async (req, res) => {
 
 }
 
-
-module.exports = {
-  getLugares: getLugares,
-  agregarLugar: agregarLugar,
-  eliminarLugar: eliminarLugar,
-  listarLugares: listarLugares
-};
+export {
+  getLugares,
+  agregarLugar,
+  eliminarLugar,
+  listarLugares
+}

@@ -1,8 +1,9 @@
-const { pool } = require('../api/db.js');
-const { generarIdentificadorUnico, uuidEventoParticipa } = require('../api/db.js');
-const jwt = require('jsonwebtoken');
-const evento = require('../models/evento.js');
-const persona = require('../models/persona.js');
+import { pool } from '../config/db.js';
+import { generarIdentificadorUnico, uuidEventoParticipa } from '../config/db.js';
+import pkg from 'jsonwebtoken';
+const { verify } = pkg;
+import evento from '../models/evento.js';
+import persona from '../models/persona.js';
 
 //Codigo que a traves de una consulta SQL manda toda la informacion que el front proporciona y crea un nuevo evento en la base de datos
 const agregarEvento = async (req, res, next) => {
@@ -13,7 +14,7 @@ const agregarEvento = async (req, res, next) => {
     const codigo_evento = generarIdentificadorUnico();
     datosNuevoEvento.codigo_evento = codigo_evento
     console.log(datosNuevoEvento.codigo_evento)
-    const { id } = jwt.verify(req.headers.authorization, 'ds1g3');
+    const { id } = verify(req.headers.authorization, 'ds1g3');
     console.log('Propietario del evento:', id)
     datosNuevoEvento.creador = id
 
@@ -263,7 +264,7 @@ const anularInscipcionEvento = async (req, res) => {
 
   try {
 
-    const eventoAnular = await evento.findByPk(req.body.codigo_evento);
+    const eventoAnular = await findByPk(req.body.codigo_evento);
 
     if (!eventoAnular) {
       res.status(404).json({ error: 'El usuario no esta inscrito a este evento' });
@@ -367,14 +368,14 @@ const EventosParaNavBar = async (req, res) => {
 }
 
 
-module.exports = {
-  agregarEvento: agregarEvento,
-  editarEvento: editarEvento,
-  obtenerEventosC: obtenerEventosC,
-  eliminarEvento: eliminarEvento,
-  anularInscipcionEvento: anularInscipcionEvento,
-  inscripcionEvento: inscripcionEvento,
-  obtenerListaParticipantes: obtenerListaParticipantes,
-  obtenerListaEventosLugar: obtenerListaEventosLugar,
-  EventosParaNavBar, EventosParaNavBar
+export {
+  agregarEvento,
+  editarEvento,
+  obtenerEventosC,
+  eliminarEvento,
+  anularInscipcionEvento,
+  inscripcionEvento,
+  obtenerListaParticipantes,
+  obtenerListaEventosLugar,
+  EventosParaNavBar
 };

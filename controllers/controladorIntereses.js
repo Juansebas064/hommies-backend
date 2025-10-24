@@ -1,4 +1,4 @@
-const { pool } = require('../api/db.js');
+import { pool } from '../config/db.js';
 
 
 const getAllIntereses = async (req, res) => {
@@ -180,10 +180,10 @@ const modificarInteresesEvento = async (req, res) => {
 };
 
 
-module.exports = {
-  getAllIntereses: getAllIntereses,
-  interesesUsuario: interesesUsuario,
-  modificarIntereses: modificarIntereses,
-  modificarInteresesEvento: modificarInteresesEvento,
-  interesesEvento: interesesEvento
-};
+export {
+  getAllIntereses,
+  interesesUsuario,
+  modificarIntereses,
+  modificarInteresesEvento,
+  interesesEvento
+} 

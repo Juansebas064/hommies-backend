@@ -1,4 +1,4 @@
-const { OAuth2Client } = require('google-auth-library');
+import { OAuth2Client } from 'google-auth-library';
 const idcliente = '650698705793-eetbgpi48lld1tb4eol6n8g355raapeg.apps.googleusercontent.com';
 const clientID = new OAuth2Client(idcliente);
 
@@ -39,5 +39,5 @@ async function verifyGoogleCredential(token) {
   }
 }
 
-module.exports = 
+export  
     {decodeJwt, verifyGoogleCredential};

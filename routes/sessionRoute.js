@@ -1,9 +1,9 @@
-const express = require('express');
-const routerJWT = express.Router();
-const createJWT = require('../controllers/JWTController');
+import { Router } from 'express';
+const routerJWT = Router();
+import JWTController from '../controllers/JWTController.js';
 
 
-routerJWT.post('/create/JWT', createJWT);
+routerJWT.post('/create/JWT', JWTController);
 
 
-module.exports = routerJWT;
+export default routerJWT;

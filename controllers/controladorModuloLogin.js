@@ -1,6 +1,6 @@
-const { pool } = require('../api/db.js');
-const { verifyGoogleCredential } = require('../api/AuthGoogle');
-const jwt = require('jsonwebtoken');
+import { pool } from '../config/db.js';
+import { verifyGoogleCredential } from '../api/AuthGoogle';
+import { sign } from 'jsonwebtoken';
 
 
 const verificarIDBd = async (idcliente) => {
@@ -30,7 +30,7 @@ const verifyGoogleLogin = async (req, res) => {
   } else {
 
     const id = VerificarBD.rows[0].id;
-    const token = jwt.sign({ id }, "ds1g3");
+    const token = sign({ id }, "ds1g3");
 
     res.send({
       token: token
@@ -39,6 +39,6 @@ const verifyGoogleLogin = async (req, res) => {
 };
 
 
-module.exports =
+export default
   verifyGoogleLogin
 

@@ -1,17 +1,20 @@
-const express = require('express');
-const routerRecoverPass = express.Router();
-const routerRecoverPassToken = express.Router();
-const routerChangePass = express.Router();
-const { recuperarPassToken, recuperarPass, cambiarPass } = require('../controllers/recoverPassword.js');
+import { Router } from 'express';
+const routerRecoverPass = Router();
+const routerRecoverPassToken = Router();
+const routerChangePass = Router();
+import { 
+  recuperarPassToken, 
+  // recuperarPass, 
+  cambiarPass } 
+  from '../controllers/recoverPassword.js';
 
 
-routerRecoverPass.post('/usuario/recuperar-cuenta', recuperarPass);
+// routerRecoverPass.post('/usuario/recuperar-cuenta', recuperarPass);
 routerRecoverPassToken.post('/usuario/recuperar-cuenta-token', recuperarPassToken);
 routerChangePass.post('/usuario/cambiar-contrasena', cambiarPass)
 
-module.exports = {
-  routerRecoverPass: routerRecoverPass,
-  routerRecoverPassToken: routerRecoverPassToken,
-  routerChangePass: routerChangePass,
+export {
+  routerChangePass,
+  routerRecoverPassToken,
+  // routerRecoverPass
 }
-

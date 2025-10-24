@@ -1,31 +1,31 @@
-const express = require('express');
-const routerGetPlace = express.Router();
-const routerAgregarLugar = express.Router();
-const routerEliminarLugar = express.Router();
-const routerListarLugares = express.Router();
+import { Router } from 'express';
+const routerGetPlace = Router();
+const routerAgregarLugar = Router();
+const routerEliminarLugar = Router();
+const routerListarLugares = Router();
 
-const { getLugares, agregarLugar, eliminarLugar, listarLugares} = require('../controllers/controladorLugar.js');
-const verificarAutenticacion = require('../middleware/verificarAutenticacion.js');
+import { getLugares, agregarLugar, eliminarLugar, listarLugares } from '../controllers/controladorLugar.js';
+import verificarAutenticacion from '../middleware/verificarAutenticacion.js';
 
-const {upload} = require('../api/multer.js')
+import { upload } from '../api/multer.js';
 
 const optionalUpload = (req, res, next) => {
-    if (!req.file) {
-      // Si no se proporciona un archivo, asignar `undefined` a `req.file` para que no cause errores
-      req.file = undefined;
-    }
-  
-    next();
-  };
+  if (!req.file) {
+    // Si no se proporciona un archivo, asignar `undefined` a `req.file` para que no cause errores
+    req.file = undefined;
+  }
+
+  next();
+};
 
 routerGetPlace.get('/lugar/consultar', verificarAutenticacion, getLugares);
-routerAgregarLugar.post('/lugar/crear', optionalUpload ,upload.single("foto"), verificarAutenticacion ,agregarLugar);
+routerAgregarLugar.post('/lugar/crear', optionalUpload, upload.single("foto"), verificarAutenticacion, agregarLugar);
 routerEliminarLugar.post('/lugar/eliminar', verificarAutenticacion, eliminarLugar);
 routerListarLugares.get('/lugar/listar', verificarAutenticacion, listarLugares);
 
-module.exports = {
-    routerGetPlace: routerGetPlace,
-    routerAgregarLugar: routerAgregarLugar,
-    routerEliminarLugar: routerEliminarLugar,
-    routerListarLugares: routerListarLugares
+export {
+  routerGetPlace,
+  routerAgregarLugar,
+  routerEliminarLugar,
+  routerListarLugares,
 }

@@ -1,9 +1,10 @@
-const bycript = require("bcrypt");
-const jwt = require('jsonwebtoken');
-const { validarSesion } = require('../api/db.js');
+import bycript from "bcrypt";
+import pkg from 'jsonwebtoken';
+const { sign } = pkg;
+import { validarSesion } from '../config/db.js';
 
 
-const jwtGenerator = async (req, res) => {
+const JWTController = async (req, res) => {
 
   const user = await validarSesion(req);
 
@@ -15,7 +16,7 @@ const jwtGenerator = async (req, res) => {
 
   } else {
 
-    const token = jwt.sign({ id: user.id }, "ds1g3");
+    const token = sign({ id: user.id }, "ds1g3");
 
     res.send({
       token: token
@@ -24,4 +25,4 @@ const jwtGenerator = async (req, res) => {
 };
 
 
-module.exports = jwtGenerator;
+export default JWTController;

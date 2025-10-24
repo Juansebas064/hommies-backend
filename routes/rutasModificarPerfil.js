@@ -1,13 +1,13 @@
-const express = require('express');
+import { Router } from 'express';
 
-const routerModificar = express.Router();
+const routerModificar = Router();
 
-const modificarPerfil = require('../controllers/controladorModuloModificarPerfil.js');
+import modificarPerfil from '../controllers/controladorModuloModificarPerfil.js';
 
 
-const verificarAutenticacion = require('../middleware/verificarAutenticacion.js');
-const { uploadAvatars } = require('../api/multer.js');
+import verificarAutenticacion from '../middleware/verificarAutenticacion.js';
+import { uploadAvatars } from '../api/multer.js';
 
-routerModificar.put('/perfil/modificar', uploadAvatars.single('foto'),verificarAutenticacion, modificarPerfil);
+routerModificar.put('/perfil/modificar', uploadAvatars.single('foto'), verificarAutenticacion, modificarPerfil);
 
-module.exports = routerModificar;
+export default routerModificar;

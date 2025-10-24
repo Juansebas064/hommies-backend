@@ -1,6 +1,6 @@
-const persona = require("../models/persona.js");
-const fs = require("fs");
-const path = require("path");
+import persona from "../models/persona.js";
+import { existsSync, unlinkSync } from "fs";
+import { join, basename } from "path";
 
 const modificarPerfil = async (req, res) => {
   try {
@@ -17,13 +17,13 @@ const modificarPerfil = async (req, res) => {
         personaExiste.foto &&
         personaExiste.foto.startsWith("https://lh3.googleusercontent.com/")
       ) {
-        const imagePath = path.join(
+        const imagePath = join(
           __dirname,
           "../api/img/avatars/",
-          path.basename(personaExiste.foto)
+          basename(personaExiste.foto)
         );
-        if (fs.existsSync(imagePath)) {
-          fs.unlinkSync(imagePath);
+        if (existsSync(imagePath)) {
+          unlinkSync(imagePath);
         }
       }
 
@@ -48,4 +48,4 @@ const modificarPerfil = async (req, res) => {
   }
 };
 
-module.exports = modificarPerfil;
+export default modificarPerfil;

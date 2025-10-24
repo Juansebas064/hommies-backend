@@ -1,12 +1,11 @@
-const express = require('express')
-const router = express.Router();
-const upload = require('../api/multer.js')
-const {pool} = require('../api/db.js')
-const {join, dirname} = require('path');
-const { encodeXText } = require('nodemailer/lib/shared');
+import { Router } from 'express';
+const router = Router();
+import { single } from '../api/multer.js';
+import { pool } from '../config/db.js';
+import { join, dirname } from 'path';
 
 
-router.post('../img', upload.single('file'), (req, res) =>{
+router.post('../img', single('file'), (req, res) => {
 
     const rutaImagen = req.file.path;
     const query = ''

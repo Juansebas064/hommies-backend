@@ -1,9 +1,9 @@
-const express = require('express');
-const routerRegister = express.Router();
-const googleRegister = require('../controllers/controladorModuloRegistroGoogle.js');
+import { Router } from 'express';
+const routerRegister = Router();
+import googleRegister from '../controllers/controladorModuloRegistroGoogle.js';
 
 
-routerRegister.post('/register/verify/google',googleRegister);
+routerRegister.post('/register/verify/google', googleRegister);
 
 
-module.exports = routerRegister;
+export default routerRegister;

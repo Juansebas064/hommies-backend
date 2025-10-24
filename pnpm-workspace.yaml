@@ -1,0 +1,6 @@
+onlyBuiltDependencies:
+  - bcrypt
+  - cpu-features
+  - protobufjs
+  - sharp
+  - ssh2

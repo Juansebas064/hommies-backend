@@ -1,9 +1,9 @@
-const express = require('express');
-const routerNormalRegister = express.Router();
-const normalRegister = require('../controllers/controladorModuloRegistroNormal.js');
+import { Router } from 'express';
+const routerNormalRegister = Router();
+import normalRegister from '../controllers/controladorModuloRegistroNormal.js';
 
 
-routerNormalRegister.post('/register/user',normalRegister);
+routerNormalRegister.post('/register/user', normalRegister);
 
 
-module.exports =routerNormalRegister;
+export default routerNormalRegister;

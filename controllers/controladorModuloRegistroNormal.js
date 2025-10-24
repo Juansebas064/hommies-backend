@@ -1,4 +1,4 @@
-const { pool, registrarPersonaNormal } = require('../api/db.js');
+import { pool, registrarPersonaNormal } from '../config/db.js';
 
 
 const verificarIDBd = async (jsonPersona) => {
@@ -42,4 +42,4 @@ const normalRegister = async (req, res) => {
 };
 
 
-module.exports = normalRegister;
+export default normalRegister;

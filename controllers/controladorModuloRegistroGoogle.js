@@ -1,6 +1,6 @@
-const { pool, registrarPersonaGoogle } = require('../api/db.js');
-const { verifyGoogleCredential } = require('../api/AuthGoogle');
-const jwt = require('jsonwebtoken');
+import { pool, registrarPersonaGoogle } from '../config/db.js';
+import { verifyGoogleCredential } from '../api/AuthGoogle.js';
+import jwt from 'jsonwebtoken';
 
 
 const verificarIDBd = async (idcliente) => {
@@ -46,4 +46,4 @@ const verifyGoogleRegister = async (req, res) => {
 };
 
 
-module.exports = verifyGoogleRegister;
+export default verifyGoogleRegister;

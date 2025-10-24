@@ -1,4 +1,4 @@
-const persona = require('../models/persona.js');
+import persona from '../models/persona.js';
 
 const getUserData = async (req, res) => {
 
@@ -22,4 +22,4 @@ const getUserData = async (req, res) => {
 };
 
 
-module.exports = getUserData;
+export default getUserData;

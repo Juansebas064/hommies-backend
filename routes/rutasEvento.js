@@ -1,17 +1,17 @@
-const express = require('express');
-const {EventosParaNavBar, agregarEvento, editarEvento, obtenerEventosC, anularInscipcionEvento, eliminarEvento, inscripcionEvento, obtenerListaParticipantes, obtenerListaEventosLugar } = require('../controllers/controladorEvento.js');
-const verificarAutenticacion = require('../middleware/verificarAutenticacion.js');
+import { Router } from 'express';
+import { EventosParaNavBar, agregarEvento, editarEvento, obtenerEventosC, anularInscipcionEvento, eliminarEvento, inscripcionEvento, obtenerListaParticipantes, obtenerListaEventosLugar } from '../controllers/controladorEvento.js';
+import verificarAutenticacion from '../middleware/verificarAutenticacion.js';
 
-const routerAgregarEvento = express.Router();
-const routerEditarEvento = express.Router();
-const routerObtenerEventosC = express.Router();
-const routerEliminar = express.Router();
+const routerAgregarEvento = Router();
+const routerEditarEvento = Router();
+const routerObtenerEventosC = Router();
+const routerEliminar = Router();
 
-const routerAnularInscripcionEvento = express.Router();
-const routerInscripcionEvento = express.Router();
-const routerObtenerParticipantes = express.Router();
-const routerObtenerListaEventos = express.Router();
-const routerEventosParaNavBar = express.Router();
+const routerAnularInscripcionEvento = Router();
+const routerInscripcionEvento = Router();
+const routerObtenerParticipantes = Router();
+const routerObtenerListaEventos = Router();
+const routerEventosParaNavBar = Router();
 
 
 routerEditarEvento.put('/evento/editar/:codigo_evento', verificarAutenticacion, editarEvento);
@@ -24,16 +24,15 @@ routerObtenerParticipantes.post('/evento/participantes', verificarAutenticacion,
 routerObtenerListaEventos.post('/evento/evento-lugar/lista', verificarAutenticacion, obtenerListaEventosLugar);
 routerEventosParaNavBar.get('/navbar/get/lista', verificarAutenticacion, EventosParaNavBar);
 
-
-module.exports = {
-  routerAgregarEvento: routerAgregarEvento,
-  routerEditarEvento: routerEditarEvento,
-  routerObtenerEventosC: routerObtenerEventosC,
-  routerEliminar: routerEliminar,
-  routerAnularInscripcionEvento: routerAnularInscripcionEvento,
-  routerInscripcionEvento: routerInscripcionEvento,
-  routerObtenerParticipantes: routerObtenerParticipantes,
-  routerObtenerListaEventos: routerObtenerListaEventos,
-  routerEventosParaNavBar: routerEventosParaNavBar
-};
+export {
+  routerAgregarEvento,
+  routerEditarEvento,
+  routerObtenerEventosC,
+  routerEliminar,
+  routerAnularInscripcionEvento,
+  routerInscripcionEvento,
+  routerObtenerParticipantes,
+  routerObtenerListaEventos,
+  routerEventosParaNavBar
+}
 

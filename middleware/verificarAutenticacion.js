@@ -1,5 +1,6 @@
-const jwt = require('jsonwebtoken');
-const persona = require('../models/persona.js');
+import pkg from 'jsonwebtoken';
+const { verify } = pkg;
+import persona from '../models/persona.js';
 
 const verificarAutenticacion = async (req, res, next) => {
   const token = req.headers.authorization;
@@ -11,7 +12,7 @@ const verificarAutenticacion = async (req, res, next) => {
 
   try {
     // Decodificar la información del token
-    const decodedToken = jwt.verify(token, 'ds1g3'); // Utiliza tu propia clave secreta del token
+    const decodedToken = verify(token, 'ds1g3'); // Utiliza tu propia clave secreta del token
 
     // Verificar la autenticidad del usuario
     const { id } = decodedToken;
@@ -32,4 +33,4 @@ const verificarAutenticacion = async (req, res, next) => {
   }
 };
 
-module.exports = verificarAutenticacion;
+export default verificarAutenticacion;

@@ -1,11 +1,9 @@
-const express = require('express');
-const verificarAutenticacion = require('../middleware/verificarAutenticacion.js');
-const {getCiudad} = require('../controllers/controladorCiudad')
-const routerGetCiudad = express.Router();
+import { Router } from 'express';
+import verificarAutenticacion from '../middleware/verificarAutenticacion.js';
+import getCiudad from '../controllers/controladorCiudad.js';
+const routerGetCiudad = Router();
 
-routerGetCiudad.get('/ciudad/obtener',verificarAutenticacion, getCiudad)
+routerGetCiudad.get('/ciudad/obtener', verificarAutenticacion, getCiudad)
 
 
-module.exports = {
-    routerGetCiudad: routerGetCiudad,
-}
+export default routerGetCiudad;

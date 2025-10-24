@@ -1,15 +1,15 @@
-const express = require('express');
+import { Router } from 'express';
 
-const routerModificarInteres = express.Router();
-const routerGetIntereses = express.Router();
-const routerInteresesUsuario = express.Router();
-const routerInteresesEvento = express.Router();
-const routerGetInteresesEvento = express.Router();
+const routerModificarInteres = Router();
+const routerGetIntereses = Router();
+const routerInteresesUsuario = Router();
+const routerInteresesEvento = Router();
+const routerGetInteresesEvento = Router();
 
 
-const { interesesUsuario, getAllIntereses, modificarIntereses, modificarInteresesEvento, interesesEvento } = require('../controllers/controladorIntereses.js');
+import { interesesUsuario, getAllIntereses, modificarIntereses, modificarInteresesEvento, interesesEvento } from '../controllers/controladorIntereses.js';
 
-const verificarAutenticacion = require('../middleware/verificarAutenticacion.js');
+import verificarAutenticacion from '../middleware/verificarAutenticacion.js';
 
 
 routerModificarInteres.post('/persona/intereses/modificar', verificarAutenticacion, modificarIntereses);
@@ -18,11 +18,10 @@ routerInteresesUsuario.get('/persona/intereses/consultar', verificarAutenticacio
 routerInteresesEvento.post('/evento/intereses/modificar', verificarAutenticacion, modificarInteresesEvento);
 routerGetInteresesEvento.post('/evento/intereses/consultar', verificarAutenticacion, interesesEvento);
 
-
-module.exports = {
-  routerModificarInteres: routerModificarInteres,
-  routerGetIntereses: routerGetIntereses,
-  routerInteresesUsuario: routerInteresesUsuario,
-  routerInteresesEvento: routerInteresesEvento,
-  routerGetInteresesEvento: routerGetInteresesEvento
-};
+export {
+  routerModificarInteres,
+  routerGetIntereses,
+  routerInteresesUsuario,
+  routerInteresesEvento,
+  routerGetInteresesEvento
+}

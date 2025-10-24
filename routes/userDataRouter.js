@@ -1,9 +1,9 @@
-const express = require('express');
-const userDataRouter = express.Router();
-const getUserData = require('../controllers/getUserDataController.js');
+import { Router } from 'express';
+const userDataRouter = Router();
+import getUserData from '../controllers/getUserDataController.js';
 
 
 userDataRouter.post('/persona/consultar', getUserData);
 
 
-module.exports = userDataRouter;
+export default userDataRouter;

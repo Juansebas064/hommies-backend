@@ -1,4 +1,4 @@
-const { pool } = require("../api/db.js");
+import { pool } from "../config/db.js";
 
 const getCiudad = async (req, res) => {
 
@@ -21,6 +21,4 @@ const getCiudad = async (req, res) => {
   }
 }
 
-module.exports = {
-  getCiudad: getCiudad,
-}
+export default getCiudad;

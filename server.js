@@ -1,144 +1,113 @@
+import dotenv from "dotenv";
+import express from "express";
+import { sequelize } from "./config/db.js";
+import cors from "cors";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+import { seedDatabase } from "./config/seedDatabase.js";
 
+import { ensurePostgresContainer } from "./config/db.js"; 
+// import {apiMessage} from "./api/utils.js";
 
-const apiMessage = require('./api/utils');
+import {
+  routerAgregarEvento,
+  routerEditarEvento,
+  routerObtenerEventosC,
+  routerAnularInscripcionEvento,
+  routerEliminar,
+  routerInscripcionEvento,
+  routerObtenerParticipantes,
+  routerObtenerListaEventos,
+  routerEventosParaNavBar
+} from "./routes/rutasEvento.js";
 
-const express = require('express');
+import userDataRouter from "./routes/userDataRouter.js";
+import routerJWT from "./routes/sessionRoute.js";
+// import verifyGoogleRegister from "./routes/rutasModuloRegistroGoogle.js";
+import normalRegister from "./routes/turaModuloRegistroNormal.js";
+import routerModificarPerfil from "./routes/rutasModificarPerfil.js";
+
+import {
+  routerGetPlace,
+  routerAgregarLugar,
+  routerEliminarLugar,
+  routerListarLugares
+} from "./routes/rutasLugar.js";
+
+import {
+  routerModificarInteres,
+  routerGetIntereses,
+  routerInteresesUsuario,
+  routerInteresesEvento,
+  routerGetInteresesEvento
+} from "./routes/rutasIntereses.js";
+
+import {
+  // routerRecoverPass,
+  // routerRecoverPassToken,
+  routerChangePass
+} from "./routes/recoverPassword.js";
+
+import routerGetCiudad from "./routes/rutasCiudad.js";
+
+import './models/persona.js'
+import './models/evento.js'
+import './models/lugar.js'
+import './models/interes.js'
+import './models/eventoParticipa.js'
+import './models/interesEvento.js'
+import './models/interesPersona.js'
+
+// ✅ dotenv primero
+dotenv.config();
+
+// ✅ inicia postgres container antes del servidor
+await ensurePostgresContainer();
+
+await sequelize.sync({ alter: true })
+seedDatabase()
+
+// ✅ Express setup
 const app = express();
-const port = 5000;
-const cors = require("cors");
-const { join, dirname } = require('path');
-//const url = require('meta');
+const port = process.env.SERVER_PORT;
 
-const { routerAgregarEvento, routerEditarEvento, routerObtenerEventosC, routerAnularInscripcionEvento, routerEliminar, routerInscripcionEvento, routerObtenerParticipantes, routerObtenerListaEventos, routerEventosParaNavBar } = require('./routes/rutasEvento');
-const userDataRouter = require('./routes/userDataRouter');
-const verifyGoogleLogin = require('./routes/rutasModuloLogin');
-const jwtCreate = require('./routes/sessionRoute');
-const verifyGoogleRegister = require('./routes/rutasModuloRegistroGoogle');
-const normalRegister = require('./routes/turaModuloRegistroNormal');
-const routerModificarPerfil = require('./routes/rutasModificarPerfil');
-const { routerGetPlace, routerAgregarLugar, routerEliminarLugar, routerListarLugares } = require('./routes/rutasLugar');
-const { routerModificarInteres, routerGetIntereses, routerInteresesUsuario, routerInteresesEvento, routerGetInteresesEvento } = require('./routes/rutasIntereses');
-const {routerRecoverPass, routerRecoverPassToken, routerChangePass} = require('./routes/recoverPassword');
-const { routerGetCiudad } = require('./routes/rutasCiudad');
-
-
-
-app.use(cors(
-  { origin: true, credentials: true }));
-
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
-app.get('/asd', (req, res) => {
-  res.send('¡Hola desde el backend para los que iniciaron sesion, pero no para jordi :)');
-});
+// ✅ rutas
+app.get("/asd", (req, res) => res.send("¡Hola desde el backend."));
 
-//use para añadir un evento
-app.use('/api', routerAgregarEvento);
+app.use("/api", routerAgregarEvento);
+app.use("/api", routerEditarEvento);
+app.use("/api", routerObtenerEventosC);
+app.use("/api", routerAnularInscripcionEvento);
+app.use("/api", routerEliminar);
+app.use("/api", routerInscripcionEvento);
+app.use("/api", routerObtenerParticipantes);
+app.use("/api", routerJWT);
+app.use("/api", normalRegister);
+app.use("/api", userDataRouter);
+app.use("/api", routerAgregarLugar);
+app.use("/api", routerEliminarLugar);
+app.use("/api", routerModificarPerfil);
+app.use("/api", routerGetPlace);
+app.use("/api", routerListarLugares);
+app.use("/api", routerModificarInteres);
+app.use("/api", routerGetIntereses);
+app.use("/api", routerInteresesUsuario);
+app.use("/api", routerInteresesEvento);
+app.use("/api", routerGetInteresesEvento);
+app.use("/api", routerObtenerListaEventos);
+// app.use("/api", routerRecoverPass);
+// app.use("/api", routerRecoverPassToken);
+app.use("/api", routerChangePass);
+app.use("/api", routerGetCiudad);
+app.use("/api", routerEventosParaNavBar);
 
-//use para editar eventos creados
-app.use('/api', routerEditarEvento);
-
-//use para consultar eventos de la misma ciudad en la que vive el usuario loggeado
-app.use('/api', routerObtenerEventosC);
-
-//use para anular inscripciones de el usuario a un evento
-app.use('/api', routerAnularInscripcionEvento);
-
-//use para eñiminar un evento
-app.use('/api', routerEliminar);
-
-//
-app.use('/api', routerInscripcionEvento);
-
-app.use('/api', routerObtenerParticipantes);
-
-//use para crear y verificar el jwt con el boton de GOOGLE
-app.use('/api', verifyGoogleLogin);
-
-
-//use para crear y verificar el jwt con el boton de INICIO NORMAL
-
-app.use('/api', jwtCreate);
-
-
-//use para registrar una persona en la base de datos con google
-
-app.use('/api', verifyGoogleRegister);
-
-
-//use para registrar una persona de forma normal
-app.use('/api', normalRegister);
-
-
-// use para obtener los datos del usuario al momento de hacer login
-
-app.use('/api', userDataRouter); /* /api/persona/consultar */
-
-
-//use para agregar lugar
-
-app.use('/api', routerAgregarLugar);
-
-//use para eliminar logicamente un lugar (inactivarlo)
-app.use('/api', routerEliminarLugar);
-
-//use para modificar el perfil
-
-app.use('/api', routerModificarPerfil);
-
-app.use('/api', routerGetPlace);
-
-app.use('/api',routerListarLugares);
-
-//use para modificar y registrar los intereses de la persona
-app.use('/api', routerModificarInteres);
-
-//use para obtener todos los intereses de la base de datos
-app.use('/api', routerGetIntereses);
-
-//use para obtener todos los intereses del usuario
-app.use('/api', routerInteresesUsuario);
-
-//use para registrar los intereses de un evento
-app.use('/api', routerInteresesEvento);
-
-// use para obtener todos los intereses de un evento
-app.use('/api', routerGetInteresesEvento)
-
-//use para obtener todos los eventos de un lugar
-app.use('/api', routerObtenerListaEventos);
-
-//use para recuperar contraseña
-app.use('/api', routerRecoverPass);
-
-//use para recuperar contraseña token
-app.use('/api', routerRecoverPassToken);
-
-//use para cambiar la contraseña
-app.use('/api', routerChangePass)
-
-//use para obtener ciudad del usuario
-app.use('/api', routerGetCiudad);
-
-
-
-
-//incio pruebas para mandar fotos al front
-//NOTA: NO BORRRAR NI REFACTORIZAR
-//Ya se intento y no sirve jsjs
-const current = dirname(require.main.filename);
-console.log(current);
-
-app.use('/api/img', express.static(join(current, 'api/img')));
-//fin pruebas para mandar fotos al front
-
-
-
-//use para tener todos los eventos de la navBar
-app.use ('/api', routerEventosParaNavBar);
-
-
+// ✅ para los archivos estáticos
+const __dirname = dirname(fileURLToPath(import.meta.url));
+app.use("/api/img", express.static(join(__dirname, "api/img")));
 
 app.listen(port, () => {
-  console.log(`Servidor backend en ejecución en http://localhost:${port}`);
+  console.log(`\n✅ Servidor backend en ejecución en http://localhost:${port}`);
 });
